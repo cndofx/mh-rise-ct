@@ -1,0 +1,3562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="42">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1337095152</ID>
+      <Description>"update july 5 2022"</Description>
+      <GroupHeader>1</GroupHeader>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095150</ID>
+      <Description>"Pointers"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337095084</ID>
+          <Description>"Zenny"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <Offsets>
+            <Offset>18</Offset>
+            <Offset>58</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095149</ID>
+          <Description>"Total Zenny Earned"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <Offsets>
+            <Offset>1C</Offset>
+            <Offset>58</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095085</ID>
+          <Description>"Points"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <Offsets>
+            <Offset>10</Offset>
+            <Offset>60</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095151</ID>
+          <Description>"Total Points Earned"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <Offsets>
+            <Offset>14</Offset>
+            <Offset>60</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095146</ID>
+      <Description>"Add Zenny"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>// author: cndofx
+// calls the game's "add zenny" function with a custom value
+// this function is normally called when selling items
+
+[ENABLE]
+aobscanmodule(AddZenny_Call,MonsterHunterRise.exe,48 8D 44 24 18 4C 8B)
+alloc(AddZenny,$1000,MonsterHunterRise.exe)
+registersymbol(AddZenny)
+
+label(AddZennyAmount)
+registersymbol(AddZennyAmount)
+
+AddZenny:
+  sub rsp,48                               // mystery value, pointer may change if game updates
+  mov rcx,[MonsterHunterRise.exe+0E956940] // can be found in RCX at the start of AddZenny_Call
+  mov rcx,[rcx+108]
+  mov rcx,[rcx+418]
+  mov rdx,[MonsterHunterRise.exe+0E96B1C0] // zenny struct bse
+  mov rdx,[rdx+58]
+  mov r8d,[AddZennyAmount] // value to add
+  call AddZenny_Call
+  add rsp,48
+  ret
+
+align 4 CC
+AddZennyAmount:
+  dd #1000
+ 
+[DISABLE]
+
+dealloc(*)
+unregistersymbol(*)
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337095147</ID>
+          <Description>"Amount"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>AddZennyAmount</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095148</ID>
+          <Description>"&gt; Add"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+createthread(AddZenny)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095107</ID>
+          <Description>"Pointers"</Description>
+          <Options moHideChildren="1"/>
+          <Color>808080</Color>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095100</ID>
+              <Description>"Get player something? (sell item to populate)"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_getunkplayerbase,MonsterHunterRise.exe,C3 48 8B 56 10 48 8B 02) // should be unique
+alloc(newmem,$1000,inject_getunkplayerbase)
+
+label(code)
+label(return)
+
+label(unkPlayer)
+registersymbol(unkPlayer)
+
+newmem:
+  mov [unkPlayer],rbx
+code:
+  mov rdx,[rsi+10]
+  mov rax,[rdx]
+  jmp return
+
+align 8 CC
+unkPlayer:
+  dq 0
+
+inject_getunkplayerbase+01:
+  jmp newmem
+  nop 2
+return:
+registersymbol(inject_getunkplayerbase)
+
+[DISABLE]
+
+inject_getunkplayerbase+01:
+  db 48 8B 56 10 48 8B 02
+
+unregistersymbol(inject_getunkplayerbase)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+263467B
+
+MonsterHunterRise.exe+2634656: 48 8B CB                 - mov rcx,rbx
+MonsterHunterRise.exe+2634659: 48 8B D6                 - mov rdx,rsi
+MonsterHunterRise.exe+263465C: E8 EF 56 4B 01           - call MonsterHunterRise.exe+3AE9D50
+MonsterHunterRise.exe+2634661: 48 8B B4 24 80 00 00 00  - mov rsi,[rsp+00000080]
+MonsterHunterRise.exe+2634669: 4C 8D 5C 24 70           - lea r11,[rsp+70]
+MonsterHunterRise.exe+263466E: 49 8B 5B 18              - mov rbx,[r11+18]
+MonsterHunterRise.exe+2634672: 49 8B 6B 20              - mov rbp,[r11+20]
+MonsterHunterRise.exe+2634676: 49 8B E3                 - mov rsp,r11
+MonsterHunterRise.exe+2634679: 5F                       - pop rdi
+MonsterHunterRise.exe+263467A: C3                       - ret 
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+263467B: 48 8B 56 10              - mov rdx,[rsi+10]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+263467F: 48 8B 02                 - mov rax,[rdx]
+MonsterHunterRise.exe+2634682: 48 8B 48 F0              - mov rcx,[rax-10]
+MonsterHunterRise.exe+2634686: 48 8B 41 28              - mov rax,[rcx+28]
+MonsterHunterRise.exe+263468A: 48 8B CB                 - mov rcx,rbx
+MonsterHunterRise.exe+263468D: FF D0                    - call rax
+MonsterHunterRise.exe+263468F: 84 C0                    - test al,al
+MonsterHunterRise.exe+2634691: 74 CE                    - je MonsterHunterRise.exe+2634661
+MonsterHunterRise.exe+2634693: 48 8B D6                 - mov rdx,rsi
+MonsterHunterRise.exe+2634696: 48 8B CB                 - mov rcx,rbx
+MonsterHunterRise.exe+2634699: E8 72 46 4C 01           - call MonsterHunterRise.exe+3AF8D10
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095101</ID>
+                  <Description>"No description"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>unkPlayer</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095145</ID>
+              <Description>"short1 (good?)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E956940</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>418</Offset>
+                <Offset>108</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095108</ID>
+              <Description>"short2 (good?)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E956948</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>A8</Offset>
+                <Offset>408</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095104</ID>
+              <Description>"E96B1C0 (good?)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E96B1C0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>A8</Offset>
+                <Offset>408</Offset>
+                <Offset>58</Offset>
+                <Offset>A8</Offset>
+                <Offset>A0</Offset>
+                <Offset>50</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095105</ID>
+              <Description>"E96B1C0 (good?)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E96B1C0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>A8</Offset>
+                <Offset>408</Offset>
+                <Offset>58</Offset>
+                <Offset>B8</Offset>
+                <Offset>A0</Offset>
+                <Offset>50</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095102</ID>
+              <Description>"E959C30"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E959C30</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>A8</Offset>
+                <Offset>408</Offset>
+                <Offset>58</Offset>
+                <Offset>218</Offset>
+                <Offset>278</Offset>
+                <Offset>E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095103</ID>
+              <Description>"E959C30"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>"MonsterHunterRise.exe"+0E959C30</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>A8</Offset>
+                <Offset>408</Offset>
+                <Offset>58</Offset>
+                <Offset>228</Offset>
+                <Offset>278</Offset>
+                <Offset>E0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095109</ID>
+              <Description>"More"</Description>
+              <Options moHideChildren="1"/>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>0</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>418</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956948</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095110</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF45478</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095111</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>418</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>418</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095112</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378C8</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095113</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>7</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>330</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>8</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>340</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>9</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>338</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>10</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>11</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>350</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095114</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EA855A0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>78</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095115</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095116</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>330</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>338</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>340</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>350</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095117</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095118</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>330</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095119</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>338</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095120</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>340</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095121</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>350</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095122</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095123</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>0</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095124</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>10</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095125</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>418</Offset>
+                    <Offset>70</Offset>
+                    <Offset>0</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095126</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>0</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095127</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>10</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095128</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>0</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095129</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>8</Offset>
+                    <Offset>340</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095130</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>0</Offset>
+                    <Offset>360</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095131</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0951BBD4</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>48</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095132</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+09B6F9E4</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>218</Offset>
+                    <Offset>5F8</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095133</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+09FD2704</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>B8</Offset>
+                    <Offset>100</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095134</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>410</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095135</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>428</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095136</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>350</Offset>
+                    <Offset>0</Offset>
+                    <Offset>100</Offset>
+                    <Offset>50</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>39</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E956940</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>E8</Offset>
+                    <Offset>10</Offset>
+                    <Offset>0</Offset>
+                    <Offset>358</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>40</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>418</Offset>
+                    <Offset>108</Offset>
+                    <Offset>F0</Offset>
+                    <Offset>0</Offset>
+                    <Offset>98</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095137</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0EF455C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>470</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095138</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0F0378B0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>488</Offset>
+                    <Offset>108</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095139</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+09E3B424</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>208</Offset>
+                    <Offset>8</Offset>
+                    <Offset>8C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095140</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+09E3B424</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>258</Offset>
+                    <Offset>8</Offset>
+                    <Offset>8D0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095141</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+09E3B424</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>298</Offset>
+                    <Offset>8</Offset>
+                    <Offset>8C0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095142</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E95DAF8</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>1C8</Offset>
+                    <Offset>158</Offset>
+                    <Offset>418</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095143</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E95DAF8</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>1D8</Offset>
+                    <Offset>1A8</Offset>
+                    <Offset>2A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095144</ID>
+                  <Description>"pointerscan result"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E95DAF8</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>A8</Offset>
+                    <Offset>408</Offset>
+                    <Offset>58</Offset>
+                    <Offset>1D8</Offset>
+                    <Offset>148</Offset>
+                    <Offset>2F0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>20</ID>
+      <Description>"Amor Spheres"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_armorspheres,MonsterHunterRise.exe,29 72 14 EB 03) // should be unique
+alloc(newmem,$1000,inject_armorspheres)
+
+label(code)
+label(return)
+
+label(pLastArmorSphere)
+registersymbol(pLastArmorSphere)
+label(bConsumeArmorSpheres)
+registersymbol(bConsumeArmorSpheres)
+
+newmem:
+  push rax
+  mov rax,pLastArmorSphere
+  mov [rax],rdx
+  pop rax
+  cmp [bConsumeArmorSpheres],0
+  jne code
+  mov esi,0
+code:
+  sub [rdx+14],esi
+  jmp MonsterHunterRise.exe+32A7E92
+  //jmp return
+
+pLastArmorSphere:
+  dq 0
+bConsumeArmorSpheres:
+  db 0
+
+inject_armorspheres:
+  jmp newmem
+return:
+registersymbol(inject_armorspheres)
+
+[DISABLE]
+
+inject_armorspheres:
+  db 29 72 14 EB 03
+
+unregistersymbol(inject_armorspheres)
+dealloc(newmem)
+
+//unregistersymbol(pLastArmorSphere)
+//unregistersymbol(bConsumeArmorSpheres)
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+32A7E8A
+
+MonsterHunterRise.exe+32A7E69: 49 8B 42 28           - mov rax,[r10+28]
+MonsterHunterRise.exe+32A7E6D: FF D0                 - call rax
+MonsterHunterRise.exe+32A7E6F: 3D 00 00 00 04        - cmp eax,04000000
+MonsterHunterRise.exe+32A7E74: 74 75                 - je MonsterHunterRise.exe+32A7EEB
+MonsterHunterRise.exe+32A7E76: 48 89 7C 24 30        - mov [rsp+30],rdi
+MonsterHunterRise.exe+32A7E7B: 48 8B 53 20           - mov rdx,[rbx+20]
+MonsterHunterRise.exe+32A7E7F: 33 FF                 - xor edi,edi
+MonsterHunterRise.exe+32A7E81: 48 63 42 14           - movsxd  rax,dword ptr [rdx+14]
+MonsterHunterRise.exe+32A7E85: 48 3B C6              - cmp rax,rsi
+MonsterHunterRise.exe+32A7E88: 7C 05                 - jl MonsterHunterRise.exe+32A7E8F
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+32A7E8A: 29 72 14              - sub [rdx+14],esi
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+32A7E8D: EB 03                 - jmp MonsterHunterRise.exe+32A7E92
+MonsterHunterRise.exe+32A7E8F: 89 7A 14              - mov [rdx+14],edi
+MonsterHunterRise.exe+32A7E92: 48 8B 05 0F 86 6B 0B  - mov rax,[MonsterHunterRise.exe+E9604A8]
+MonsterHunterRise.exe+32A7E99: 83 B8 D0 00 00 00 01  - cmp dword ptr [rax+000000D0],01
+MonsterHunterRise.exe+32A7EA0: 74 1B                 - je MonsterHunterRise.exe+32A7EBD
+MonsterHunterRise.exe+32A7EA2: 48 8B 43 20           - mov rax,[rbx+20]
+MonsterHunterRise.exe+32A7EA6: 48 8B CD              - mov rcx,rbp
+MonsterHunterRise.exe+32A7EA9: 48 8B 15 E8 F2 76 0B  - mov rdx,[MonsterHunterRise.exe+EA17198]
+MonsterHunterRise.exe+32A7EB0: 44 8B 48 14           - mov r9d,[rax+14]
+MonsterHunterRise.exe+32A7EB4: 44 8B 40 10           - mov r8d,[rax+10]
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>21</ID>
+          <Description>"Consume armor spheres on upgrade?"</Description>
+          <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">1:True
+0:False
+</DropDownList>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>bConsumeArmorSpheres</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>26</ID>
+          <Description>"^ affects all items"</Description>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"Last Quantity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pLastArmorSphere</Address>
+          <Offsets>
+            <Offset>14</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>50</ID>
+      <Description>"Find Hovered Item in Box (mostly working)"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-04
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_hovereditem,MonsterHunterRise.exe,EB 1D 48 8B 07 48 8B D7) // should be unique
+alloc(newmem,$1000,inject_hovereditem)
+
+label(code)
+label(return)
+
+label(pHoveredItem)
+registersymbol(pHoveredItem)
+
+newmem:
+  mov [pHoveredItem],rdi
+code:
+  mov rax,[rdi]
+  mov rdx,rdi
+  jmp return
+
+align 4
+pHoveredItem:
+  dq 0
+
+inject_hovereditem+02:
+  jmp newmem
+  nop
+return:
+registersymbol(inject_hovereditem)
+
+[DISABLE]
+
+inject_hovereditem+02:
+  db 48 8B 07 48 8B D7
+
+unregistersymbol(inject_hovereditem)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+31CA123
+
+MonsterHunterRise.exe+31CA104: 48 8B 07        - mov rax,[rdi]
+MonsterHunterRise.exe+31CA107: 48 8B D7        - mov rdx,rdi
+MonsterHunterRise.exe+31CA10A: 48 8B 48 F0     - mov rcx,[rax-10]
+MonsterHunterRise.exe+31CA10E: 48 8B 41 28     - mov rax,[rcx+28]
+MonsterHunterRise.exe+31CA112: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA115: FF D0           - call rax
+MonsterHunterRise.exe+31CA117: 8B D0           - mov edx,eax
+MonsterHunterRise.exe+31CA119: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA11C: E8 3F F9 69 FD  - call MonsterHunterRise.exe+869A60
+MonsterHunterRise.exe+31CA121: EB 1D           - jmp MonsterHunterRise.exe+31CA140
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+31CA123: 48 8B 07        - mov rax,[rdi]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+31CA126: 48 8B D7        - mov rdx,rdi
+MonsterHunterRise.exe+31CA129: 48 8B 48 F0     - mov rcx,[rax-10]
+MonsterHunterRise.exe+31CA12D: 48 8B 41 28     - mov rax,[rcx+28]
+MonsterHunterRise.exe+31CA131: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA134: FF D0           - call rax
+MonsterHunterRise.exe+31CA136: 8B D0           - mov edx,eax
+MonsterHunterRise.exe+31CA138: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA13B: E8 70 A0 21 00  - call MonsterHunterRise.exe+33E41B0
+MonsterHunterRise.exe+31CA140: 3B C5           - cmp eax,ebp
+MonsterHunterRise.exe+31CA142: 73 7C           - jae MonsterHunterRise.exe+31CA1C0
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>51</ID>
+          <Description>"Base"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>808080</Color>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>0</ByteLength>
+          <Address>pHoveredItem</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>52</ID>
+          <Description>"Quantity"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pHoveredItem</Address>
+          <Offsets>
+            <Offset>44</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>53</ID>
+          <Description>"ID"</Description>
+          <DropDownList DescriptionOnly="1" DisplayValueAsItem="1">04100005:Max Potion
+04100006:Potion
+04100007:Mega Potion
+04100008:Well-done Steak
+0410000D:Antidote
+04100081:Nulberry
+04100089:Energy Drink
+041000A3:Flash Bomb
+041001D8:Ration
+041001DE:Mega Demondrug
+041001DF:Might Seed
+041001E3:Mega Armorskin
+041001E4:Adamant Seed
+</DropDownList>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pHoveredItem</Address>
+          <Offsets>
+            <Offset>40</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>54</ID>
+          <Description>"ID"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pHoveredItem</Address>
+          <Offsets>
+            <Offset>40</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>56</ID>
+          <Description>"unk MonsterHunterRise.exe+E95DC60"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+E95DC60</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>79</ID>
+      <Description>"Find Player"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_getplayer,MonsterHunterRise.exe,48 8B 92 20 01 00 00 41 BE) // should be unique
+alloc(newmem,$1000,inject_getplayer)
+
+label(code)
+label(return)
+
+label(pPlayer)
+registersymbol(pPlayer)
+
+newmem:
+  mov [pPlayer],rdx
+code:
+  mov rdx,[rdx+00000120]
+  jmp return
+
+align 8
+pPlayer:
+  dq 0
+
+inject_getplayer:
+  jmp newmem
+  nop 2
+return:
+registersymbol(inject_getplayer)
+
+[DISABLE]
+
+inject_getplayer:
+  db 48 8B 92 20 01 00 00
+
+unregistersymbol(inject_getplayer)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39D7E81
+
+MonsterHunterRise.exe+39D7E53: 0F B6 C0              - movzx eax,al
+MonsterHunterRise.exe+39D7E56: 85 C0                 - test eax,eax
+MonsterHunterRise.exe+39D7E58: 0F 84 21 03 00 00     - je MonsterHunterRise.exe+39D817F
+MonsterHunterRise.exe+39D7E5E: 48 89 6C 24 60        - mov [rsp+60],rbp
+MonsterHunterRise.exe+39D7E63: 48 89 74 24 68        - mov [rsp+68],rsi
+MonsterHunterRise.exe+39D7E68: 4C 89 64 24 70        - mov [rsp+70],r12
+MonsterHunterRise.exe+39D7E6D: 4C 89 6C 24 40        - mov [rsp+40],r13
+MonsterHunterRise.exe+39D7E72: 4C 89 74 24 38        - mov [rsp+38],r14
+MonsterHunterRise.exe+39D7E77: 4C 89 7C 24 30        - mov [rsp+30],r15
+MonsterHunterRise.exe+39D7E7C: 0F 29 74 24 20        - movaps [rsp+20],xmm6
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+39D7E81: 48 8B 92 20 01 00 00  - mov rdx,[rdx+00000120]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+39D7E88: 41 BE 01 00 00 00     - mov r14d,00000001
+MonsterHunterRise.exe+39D7E8E: 41 8B F6              - mov esi,r14d
+MonsterHunterRise.exe+39D7E91: 45 32 FF              - xor r15l,r15l
+MonsterHunterRise.exe+39D7E94: 8B 6A 24              - mov ebp,[rdx+24]
+MonsterHunterRise.exe+39D7E97: 48 8B 52 10           - mov rdx,[rdx+10]
+MonsterHunterRise.exe+39D7E9B: E8 90 59 F9 FE        - call MonsterHunterRise.exe+296D830
+MonsterHunterRise.exe+39D7EA0: 48 8B 93 28 01 00 00  - mov rdx,[rbx+00000128]
+MonsterHunterRise.exe+39D7EA7: 45 8D 4E 02           - lea r9d,[r14+02]
+MonsterHunterRise.exe+39D7EAB: F3 0F 2C C0           - cvttss2si eax,xmm0
+MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>103</ID>
+          <Description>"Max Health"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>18</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>85</ID>
+          <Description>"Health?"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>1C</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"Red Health"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>24</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>81</ID>
+          <Description>"Stamina"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>28</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>82</ID>
+          <Description>"Max Stamina"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>2C</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>83</ID>
+          <Description>"Hunger Timer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>30</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>128</ID>
+          <Description>"Attack"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>44</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>129</ID>
+          <Description>"Defense"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>58</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>112</ID>
+          <Description>"===================="</Description>
+          <Color>808080</Color>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>80</ID>
+          <Description>"Outer Base"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>808080</Color>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>0</ByteLength>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>104</ID>
+          <Description>"Inner Base"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>808080</Color>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>0</ByteLength>
+          <Address>pPlayer</Address>
+          <Offsets>
+            <Offset>0</Offset>
+            <Offset>120</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>124</ID>
+      <Description>"re"</Description>
+      <Options moHideChildren="1"/>
+      <Color>808080</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>105</ID>
+          <Description>"unk MonsterHunterRise.exe+E95DC60 (something entity list?)"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+E95C570</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>106</ID>
+              <Description>"[val]"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E95C570</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>110</ID>
+              <Description>"[val]+0xA0"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E95C570</Address>
+              <Offsets>
+                <Offset>A0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>111</ID>
+                  <Description>"[[val]+0xA0]+0x10"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+E95C570</Address>
+                  <Offsets>
+                    <Offset>10</Offset>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>108</ID>
+              <Description>"[val]+0x58"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E95C570</Address>
+              <Offsets>
+                <Offset>58</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>109</ID>
+                  <Description>"[[val]+0x58] + 0*0x8 + 0x20 (player base)"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+E95C570</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>58</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>113</ID>
+          <Description>"unk MonsterHunterRise.exe+E959900"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+E959900</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>115</ID>
+              <Description>"[val]"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E959900</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>116</ID>
+              <Description>"[val]+0xA8"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E959900</Address>
+              <Offsets>
+                <Offset>A8</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>117</ID>
+                  <Description>"[[val]+0xA8]+18"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+E959900</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>A8</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>125</ID>
+          <Description>"unk MonsterHunterRise.exe+E959C30 (player?)"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+E959C30</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>126</ID>
+              <Description>"unk MonsterHunterRise.exe+E959C30 (player?)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E959C30</Address>
+              <Offsets>
+                <Offset>E0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>133</ID>
+                  <Description>"player max health"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+E959C30</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>120</Offset>
+                    <Offset>E0</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095087</ID>
+          <Description>"unk MonsterHunterRise.exe+E9583D0 (zenny related?)"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+E959C30</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095088</ID>
+              <Description>"[val]"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E9583D0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095089</ID>
+              <Description>"[val]+0xA0"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E9583D0</Address>
+              <Offsets>
+                <Offset>A0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095090</ID>
+                  <Description>"[[val]+0xA0]+0x20"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+E9583D0</Address>
+                  <Offsets>
+                    <Offset>20</Offset>
+                    <Offset>A0</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095091</ID>
+                      <Description>"[[[val]+0xA0]+0x20]+0x138 (some other zenny value?)"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+E9583D0</Address>
+                      <Offsets>
+                        <Offset>138</Offset>
+                        <Offset>20</Offset>
+                        <Offset>A0</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095096</ID>
+          <Description>"unk MonsterHunterRise.exe+0E96B1C0 (player zenny?)"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095097</ID>
+              <Description>"[val]"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095098</ID>
+              <Description>"[val]+0x10"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095099</ID>
+              <Description>"[val]+0x58 (zenny base)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>58</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>24</ID>
+      <Description>"trash"</Description>
+      <Options moHideChildren="1"/>
+      <Color>808080</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"Find Zenny"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>define(address,"MonsterHunterRise.exe"+2A351CE)
+define(bytes,8B 40 18 48 8D 54 24 38)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"MonsterHunterRise.exe"+2A351CE)
+
+label(code)
+label(return)
+
+//globalalloc(pMoney,8)
+
+newmem:
+  push rbx
+  mov rbx,pMoney
+  mov [rbx],rax
+  pop rbx
+code:
+  mov eax,[rax+18]
+  lea rdx,[rsp+38]
+  jmp return
+
+address:
+  jmp newmem
+  nop 3
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov eax,[rax+18]
+  // lea rdx,[rsp+38]
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+2A351CE
+
+MonsterHunterRise.exe+2A351B7: 74 04                 - je MonsterHunterRise.exe+2A351BD
+MonsterHunterRise.exe+2A351B9: 32 C0                 - xor al,al
+MonsterHunterRise.exe+2A351BB: EB 02                 - jmp MonsterHunterRise.exe+2A351BF
+MonsterHunterRise.exe+2A351BD: B0 01                 - mov al,01
+MonsterHunterRise.exe+2A351BF: 0F B6 C0              - movzx eax,al
+MonsterHunterRise.exe+2A351C2: 85 C0                 - test eax,eax
+MonsterHunterRise.exe+2A351C4: 75 06                 - jne MonsterHunterRise.exe+2A351CC
+MonsterHunterRise.exe+2A351C6: 48 8B 42 58           - mov rax,[rdx+58]
+MonsterHunterRise.exe+2A351CA: EB 02                 - jmp MonsterHunterRise.exe+2A351CE
+MonsterHunterRise.exe+2A351CC: 33 C0                 - xor eax,eax
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+2A351CE: 8B 40 18              - mov eax,[rax+18]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+2A351D1: 48 8D 54 24 38        - lea rdx,[rsp+38]
+MonsterHunterRise.exe+2A351D6: 89 44 24 38           - mov [rsp+38],eax
+MonsterHunterRise.exe+2A351DA: 48 8B 05 FF F9 69 09  - mov rax,[MonsterHunterRise.exe+C0D4BE0]
+MonsterHunterRise.exe+2A351E1: 4C 8B 40 28           - mov r8,[rax+28]
+MonsterHunterRise.exe+2A351E5: E8 56 E6 19 00        - call MonsterHunterRise.exe+2BD3840
+MonsterHunterRise.exe+2A351EA: 4C 8B C0              - mov r8,rax
+MonsterHunterRise.exe+2A351ED: 48 8B D3              - mov rdx,rbx
+MonsterHunterRise.exe+2A351F0: 48 8B CF              - mov rcx,rdi
+MonsterHunterRise.exe+2A351F3: E8 88 A9 B2 FD        - call MonsterHunterRise.exe+55FB80
+MonsterHunterRise.exe+2A351F8: 48 8B 5C 24 30        - mov rbx,[rsp+30]
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>3</ID>
+              <Description>"Zenny"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pMoney</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>5</ID>
+          <Description>"Find Hovered Item in Box (broken)"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-06-27
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+define(address,"MonsterHunterRise.exe"+4C8F94)
+define(bytes,8B 40 14 C3 CC)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"MonsterHunterRise.exe"+4C8F94)
+
+label(code)
+label(return)
+
+//globalalloc(pHoveredItem,8)
+
+newmem:
+  //cmp [rax+2A8],0
+  //jne code
+  //cmp [rax+694],1
+  //jne code
+  //cmp [rax+2A0],0
+  //jne code
+  //cmp [rax+8A4],1
+  //jne code
+  //cmp [rax+B94],1
+  //jne code
+  //cmp [rax+C3C],4
+  //jne code
+  //cmp [rax+504],0
+  //je code
+  //cmp [rbp+4],1 // crash
+  //jne code
+  push rbx
+  mov rbx,pHoveredItem
+  mov [rbx],rax
+  pop rbx
+code:
+  mov eax,[rax+14]
+  ret 
+  int 3 
+  jmp return
+
+address:
+  jmp newmem
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov eax,[rax+14]
+  // ret 
+  // int 3 
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+4C8F94
+
+MonsterHunterRise.exe+4C8F82: 41 8B 40 20     - mov eax,[r8+20]
+MonsterHunterRise.exe+4C8F86: 89 42 20        - mov [rdx+20],eax
+MonsterHunterRise.exe+4C8F89: C3              - ret 
+MonsterHunterRise.exe+4C8F8A: CC              - int 3 
+MonsterHunterRise.exe+4C8F8B: CC              - int 3 
+MonsterHunterRise.exe+4C8F8C: CC              - int 3 
+MonsterHunterRise.exe+4C8F8D: CC              - int 3 
+MonsterHunterRise.exe+4C8F8E: CC              - int 3 
+MonsterHunterRise.exe+4C8F8F: CC              - int 3 
+MonsterHunterRise.exe+4C8F90: 48 8B 42 20     - mov rax,[rdx+20]
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+4C8F94: 8B 40 14        - mov eax,[rax+14]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+4C8F97: C3              - ret 
+MonsterHunterRise.exe+4C8F98: CC              - int 3 
+MonsterHunterRise.exe+4C8F99: CC              - int 3 
+MonsterHunterRise.exe+4C8F9A: CC              - int 3 
+MonsterHunterRise.exe+4C8F9B: CC              - int 3 
+MonsterHunterRise.exe+4C8F9C: CC              - int 3 
+MonsterHunterRise.exe+4C8F9D: CC              - int 3 
+MonsterHunterRise.exe+4C8F9E: CC              - int 3 
+MonsterHunterRise.exe+4C8F9F: CC              - int 3 
+MonsterHunterRise.exe+4C8FA0: 48 89 5C 24 08  - mov [rsp+08],rbx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>6</ID>
+              <Description>"Quantity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pHoveredItem</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>12</ID>
+          <Description>"inventory items are 60 bytes apart"</Description>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>13</ID>
+              <Description>"offset 0x10 is the item ID"</Description>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>14</ID>
+              <Description>"offset 0x14 is the quantity"</Description>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>19</ID>
+          <Description>"No description"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>26024A04</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>27</ID>
+          <Description>"No description"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>2615CE64</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>28</ID>
+          <Description>"No Description"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>272824F0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>33</ID>
+          <Description>"slot 1"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>2615CE64</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>34</ID>
+          <Description>"slot 2"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>2615CEC4</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>35</ID>
+          <Description>"aaa"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>2615CE80+14</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>37</ID>
+          <Description>"No description"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>25A09A10</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>38</ID>
+          <Description>"No description"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>25A09A20</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>41</ID>
+          <Description>"No description"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0000000025A099E0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>29</ID>
+          <Description>"Find Hovered Item in Box"</Description>
+          <Options moHideChildren="1"/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-04
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_itemread,MonsterHunterRise.exe,42 20 8B 40 14 C3 CC) // should be unique
+alloc(newmem,$1000,inject_itemread)
+
+label(code)
+label(return)
+
+label(pHoveredItem)
+registersymbol(pHoveredItem)
+
+newmem:
+  cmp [rdx+10],1
+  je code
+  push rbx
+  mov rbx,pHoveredItem
+  mov [rbx],rax
+  pop rbx
+code:
+  mov eax,[rax+14]
+  ret 
+  int 3 
+  jmp return
+
+pHoveredItem:
+  dq 0
+
+inject_itemread+02:
+  jmp newmem
+return:
+registersymbol(inject_itemread)
+
+[DISABLE]
+
+inject_itemread+02:
+  db 8B 40 14 C3 CC
+
+unregistersymbol(inject_itemread)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+30AD34
+
+MonsterHunterRise.exe+30AD27: C3           - ret 
+MonsterHunterRise.exe+30AD28: CC           - int 3 
+MonsterHunterRise.exe+30AD29: CC           - int 3 
+MonsterHunterRise.exe+30AD2A: CC           - int 3 
+MonsterHunterRise.exe+30AD2B: CC           - int 3 
+MonsterHunterRise.exe+30AD2C: CC           - int 3 
+MonsterHunterRise.exe+30AD2D: CC           - int 3 
+MonsterHunterRise.exe+30AD2E: CC           - int 3 
+MonsterHunterRise.exe+30AD2F: CC           - int 3 
+MonsterHunterRise.exe+30AD30: 48 8B 42 20  - mov rax,[rdx+20]
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+30AD34: 8B 40 14     - mov eax,[rax+14]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+30AD37: C3           - ret 
+MonsterHunterRise.exe+30AD38: CC           - int 3 
+MonsterHunterRise.exe+30AD39: CC           - int 3 
+MonsterHunterRise.exe+30AD3A: CC           - int 3 
+MonsterHunterRise.exe+30AD3B: CC           - int 3 
+MonsterHunterRise.exe+30AD3C: CC           - int 3 
+MonsterHunterRise.exe+30AD3D: CC           - int 3 
+MonsterHunterRise.exe+30AD3E: CC           - int 3 
+MonsterHunterRise.exe+30AD3F: CC           - int 3 
+MonsterHunterRise.exe+30AD40: 44 8B C2     - mov r8d,edx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>36</ID>
+              <Description>"Base"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>pHoveredItem</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>31</ID>
+              <Description>"Quantity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pHoveredItem</Address>
+              <Offsets>
+                <Offset>14</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>30</ID>
+              <Description>"ID"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pHoveredItem</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>32</ID>
+              <Description>"ID"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pHoveredItem</Address>
+              <Offsets>
+                <Offset>10</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>42</ID>
+          <Description>"item test"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-04
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_itemtest,MonsterHunterRise.exe,EB 1D 48 8B 07 48 8B D7) // should be unique
+alloc(newmem,$1000,inject_itemtest)
+
+label(code)
+label(return)
+
+label(val1)
+registersymbol(val1)
+
+newmem:
+  mov [val1],rdi
+code:
+  mov rax,[rdi]
+  mov rdx,rdi
+  jmp return
+
+align 4
+val1:
+  dq 0
+
+inject_itemtest+02:
+  jmp newmem
+  nop
+return:
+registersymbol(inject_itemtest)
+
+[DISABLE]
+
+inject_itemtest+02:
+  db 48 8B 07 48 8B D7
+
+unregistersymbol(inject_itemtest)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+31CA123
+
+MonsterHunterRise.exe+31CA104: 48 8B 07        - mov rax,[rdi]
+MonsterHunterRise.exe+31CA107: 48 8B D7        - mov rdx,rdi
+MonsterHunterRise.exe+31CA10A: 48 8B 48 F0     - mov rcx,[rax-10]
+MonsterHunterRise.exe+31CA10E: 48 8B 41 28     - mov rax,[rcx+28]
+MonsterHunterRise.exe+31CA112: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA115: FF D0           - call rax
+MonsterHunterRise.exe+31CA117: 8B D0           - mov edx,eax
+MonsterHunterRise.exe+31CA119: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA11C: E8 3F F9 69 FD  - call MonsterHunterRise.exe+869A60
+MonsterHunterRise.exe+31CA121: EB 1D           - jmp MonsterHunterRise.exe+31CA140
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+31CA123: 48 8B 07        - mov rax,[rdi]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+31CA126: 48 8B D7        - mov rdx,rdi
+MonsterHunterRise.exe+31CA129: 48 8B 48 F0     - mov rcx,[rax-10]
+MonsterHunterRise.exe+31CA12D: 48 8B 41 28     - mov rax,[rcx+28]
+MonsterHunterRise.exe+31CA131: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA134: FF D0           - call rax
+MonsterHunterRise.exe+31CA136: 8B D0           - mov edx,eax
+MonsterHunterRise.exe+31CA138: 48 8B CE        - mov rcx,rsi
+MonsterHunterRise.exe+31CA13B: E8 70 A0 21 00  - call MonsterHunterRise.exe+33E41B0
+MonsterHunterRise.exe+31CA140: 3B C5           - cmp eax,ebp
+MonsterHunterRise.exe+31CA142: 73 7C           - jae MonsterHunterRise.exe+31CA1C0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>43</ID>
+              <Description>"val1 (value of rdx when accessing items)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>val1</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>44</ID>
+                  <Description>"[rdx]"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Array of byte</VariableType>
+                  <ByteLength>0</ByteLength>
+                  <Address>val1</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>0</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>45</ID>
+                      <Description>"[rdx-0x10]"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Array of byte</VariableType>
+                      <ByteLength>0</ByteLength>
+                      <Address>val1</Address>
+                      <Offsets>
+                        <Offset>0</Offset>
+                        <Offset>-10</Offset>
+                        <Offset>0</Offset>
+                      </Offsets>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>46</ID>
+                          <Description>"[rdx+0x28] (vtable get item id?)"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Array of byte</VariableType>
+                          <ByteLength>0</ByteLength>
+                          <Address>val1</Address>
+                          <Offsets>
+                            <Offset>0</Offset>
+                            <Offset>28</Offset>
+                            <Offset>-10</Offset>
+                            <Offset>0</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>49</ID>
+                          <Description>"[rdx+0x30] (vtable get item count?)"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Array of byte</VariableType>
+                          <ByteLength>0</ByteLength>
+                          <Address>val1</Address>
+                          <Offsets>
+                            <Offset>0</Offset>
+                            <Offset>30</Offset>
+                            <Offset>-10</Offset>
+                            <Offset>0</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>47</ID>
+              <Description>"Base"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>val1</Address>
+              <Offsets>
+                <Offset>0</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>48</ID>
+                  <Description>"Quantity"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>val1</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>68</ID>
+          <Description>"Find Player (bad)"</Description>
+          <Options moHideChildren="1"/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_player1,MonsterHunterRise.exe,03 00 00 48 8B 9F 20 01 00 00) // should be unique
+alloc(newmem,$1000,inject_player1)
+
+label(code)
+label(return)
+
+label(pPlayer)
+registersymbol(pPlayer)
+
+newmem:
+  mov [pPlayer],rdi
+code:
+  mov rbx,[rdi+00000120]
+  jmp return
+
+align 8
+pPlayer:
+  dq 0
+
+inject_player1+03:
+  jmp newmem
+  nop 2
+return:
+registersymbol(inject_player1)
+
+[DISABLE]
+
+inject_player1+03:
+  db 48 8B 9F 20 01 00 00
+
+unregistersymbol(inject_player1)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39D68BC
+
+MonsterHunterRise.exe+39D688A: EB 30                    - jmp MonsterHunterRise.exe+39D68BC
+MonsterHunterRise.exe+39D688C: 48 8B 05 DD 5C F8 0A     - mov rax,[MonsterHunterRise.exe+E95C570]
+MonsterHunterRise.exe+39D6893: 48 8B 48 78              - mov rcx,[rax+78]
+MonsterHunterRise.exe+39D6897: 48 8B 41 30              - mov rax,[rcx+30]
+MonsterHunterRise.exe+39D689B: F3 0F 10 B8 2C 03 00 00  - movss xmm7,[rax+0000032C]
+MonsterHunterRise.exe+39D68A3: EB 17                    - jmp MonsterHunterRise.exe+39D68BC
+MonsterHunterRise.exe+39D68A5: 48 8B 05 C4 5C F8 0A     - mov rax,[MonsterHunterRise.exe+E95C570]
+MonsterHunterRise.exe+39D68AC: 48 8B 48 78              - mov rcx,[rax+78]
+MonsterHunterRise.exe+39D68B0: 48 8B 41 30              - mov rax,[rcx+30]
+MonsterHunterRise.exe+39D68B4: F3 0F 10 B8 28 03 00 00  - movss xmm7,[rax+00000328]
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+39D68BC: 48 8B 9F 20 01 00 00     - mov rbx,[rdi+00000120]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+39D68C3: 48 8B CE                 - mov rcx,rsi
+MonsterHunterRise.exe+39D68C6: 48 8B 53 10              - mov rdx,[rbx+10]
+MonsterHunterRise.exe+39D68CA: E8 61 6F F9 FE           - call MonsterHunterRise.exe+296D830
+MonsterHunterRise.exe+39D68CF: 48 8B 87 20 01 00 00     - mov rax,[rdi+00000120]
+MonsterHunterRise.exe+39D68D6: 0F 57 F6                 - xorps xmm6,xmm6
+MonsterHunterRise.exe+39D68D9: 48 8B CE                 - mov rcx,rsi
+MonsterHunterRise.exe+39D68DC: F3 0F 5A F0              - cvtss2sd xmm6,xmm0
+MonsterHunterRise.exe+39D68E0: 48 8B 50 10              - mov rdx,[rax+10]
+MonsterHunterRise.exe+39D68E4: E8 47 6F F9 FE           - call MonsterHunterRise.exe+296D830
+MonsterHunterRise.exe+39D68E9: F3 0F 2C C0              - cvttss2si eax,xmm0
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>78</ID>
+              <Description>"Red Health"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pPlayer</Address>
+              <Offsets>
+                <Offset>24</Offset>
+                <Offset>120</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>75</ID>
+              <Description>"Stamina"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>pPlayer</Address>
+              <Offsets>
+                <Offset>28</Offset>
+                <Offset>120</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>76</ID>
+              <Description>"Max Stamina"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>pPlayer</Address>
+              <Offsets>
+                <Offset>2C</Offset>
+                <Offset>120</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>77</ID>
+              <Description>"Hunger Timer"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>pPlayer</Address>
+              <Offsets>
+                <Offset>30</Offset>
+                <Offset>120</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>90</ID>
+          <Description>"health?"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EC53A64</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>91</ID>
+          <Description>"health?"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Float</VariableType>
+          <Address>1EC53A5C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>92</ID>
+          <Description>"No description"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EC53B58</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>93</ID>
+          <Description>"No description"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EC539E8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>96</ID>
+          <Description>"fake health"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EB6EEB8</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>122</ID>
+              <Description>"fake health"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>1EB6EEB8+D8</Address>
+              <Offsets>
+                <Offset>74</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>97</ID>
+          <Description>"No description"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EB6EEA8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>98</ID>
+          <Description>"No description"</Description>
+          <VariableType>Float</VariableType>
+          <Address>1EB6EE9C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>99</ID>
+          <Description>"test1 fakehealth"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>1EB6C4D0</Address>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>123</ID>
+              <Description>"test1 fakehealth"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>1EB6C4D0+D8</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>100</ID>
+          <Description>"test1"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>1EB6C4D0+D8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>114</ID>
+          <Description>"test1"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>1EB6C4D0+D8</Address>
+          <Offsets>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>127</ID>
+          <Description>"No description"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>4 Bytes</VariableType>
+          <Address>1E849A00</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>23</ID>
+          <Description>"Find Zenny"</Description>
+          <Options moHideChildren="1"/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanmodule(getzenny,MonsterHunterRise.exe,8B 40 18 48 8D 54 24 38) // should be unique
+alloc(newmem,$1000,getzenny)
+
+label(code)
+label(return)
+
+label(pZenny)
+registersymbol(pZenny)
+
+newmem:
+  push rbx
+  mov rbx,pZenny
+  mov [rbx],rax
+  pop rbx
+code:
+  mov eax,[rax+18]
+  lea rdx,[rsp+38]
+  jmp return
+
+pZenny:
+  dq 0
+
+getzenny:
+  jmp newmem
+  nop 3
+return:
+registersymbol(getzenny)
+
+[DISABLE]
+
+getzenny:
+  db 8B 40 18 48 8D 54 24 38
+
+unregistersymbol(getzenny)
+dealloc(newmem)
+
+unregistersymbol(pZenny)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+22FEEF8
+
+MonsterHunterRise.exe+22FEEE0: 32 C0                 - xor al,al
+MonsterHunterRise.exe+22FEEE2: EB 02                 - jmp MonsterHunterRise.exe+22FEEE6
+MonsterHunterRise.exe+22FEEE4: B0 01                 - mov al,01
+MonsterHunterRise.exe+22FEEE6: 0F B6 C0              - movzx eax,al
+MonsterHunterRise.exe+22FEEE9: 33 DB                 - xor ebx,ebx
+MonsterHunterRise.exe+22FEEEB: 85 C0                 - test eax,eax
+MonsterHunterRise.exe+22FEEED: 75 06                 - jne MonsterHunterRise.exe+22FEEF5
+MonsterHunterRise.exe+22FEEEF: 48 8B 42 58           - mov rax,[rdx+58]
+MonsterHunterRise.exe+22FEEF3: EB 03                 - jmp MonsterHunterRise.exe+22FEEF8
+MonsterHunterRise.exe+22FEEF5: 48 8B C3              - mov rax,rbx
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+22FEEF8: 8B 40 18              - mov eax,[rax+18]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+22FEEFB: 48 8D 54 24 38        - lea rdx,[rsp+38]
+MonsterHunterRise.exe+22FEF00: 89 44 24 38           - mov [rsp+38],eax
+MonsterHunterRise.exe+22FEF04: 48 8B 05 E5 45 74 0C  - mov rax,[MonsterHunterRise.exe+EA434F0]
+MonsterHunterRise.exe+22FEF0B: 48 89 5C 24 40        - mov [rsp+40],rbx
+MonsterHunterRise.exe+22FEF10: 4C 8B 40 28           - mov r8,[rax+28]
+MonsterHunterRise.exe+22FEF14: E8 77 B8 88 01        - call MonsterHunterRise.exe+3B8A790
+MonsterHunterRise.exe+22FEF19: 48 8B F8              - mov rdi,rax
+MonsterHunterRise.exe+22FEF1C: 48 85 C0              - test rax,rax
+MonsterHunterRise.exe+22FEF1F: 74 0D                 - je MonsterHunterRise.exe+22FEF2E
+MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>131</ID>
+              <Description>"Maximum"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808080</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+E9607F0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>132</ID>
+              <Description>"Minimum?"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808080</Color>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+e9607f4</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>25</ID>
+              <Description>"Zenny"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pZenny</Address>
+              <Offsets>
+                <Offset>18</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>130</ID>
+              <Description>"Total Zenny Earned"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pZenny</Address>
+              <Offsets>
+                <Offset>1C</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095086</ID>
+              <Description>"unknown pointer"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>pZenny</Address>
+              <Offsets>
+                <Offset>30</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095092</ID>
+                  <Description>"unknown value +0xC"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pZenny</Address>
+                  <Offsets>
+                    <Offset>30+C</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095095</ID>
+                  <Description>"unknown value +0xF"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Byte</VariableType>
+                  <Address>pZenny</Address>
+                  <Offsets>
+                    <Offset>30+F</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>get item quantity :call rax</Description>
+      <AddressString>MonsterHunterRise.exe+31C9FBC</AddressString>
+      <Before>
+        <Byte>41</Byte>
+        <Byte>30</Byte>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>CE</Byte>
+      </Before>
+      <Actual>
+        <Byte>FF</Byte>
+        <Byte>D0</Byte>
+      </Actual>
+      <After>
+        <Byte>44</Byte>
+        <Byte>8B</Byte>
+        <Byte>C8</Byte>
+        <Byte>4C</Byte>
+        <Byte>8B</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>get item id :call rax</Description>
+      <AddressString>MonsterHunterRise.exe+31C9F61</AddressString>
+      <Before>
+        <Byte>F0</Byte>
+        <Byte>49</Byte>
+        <Byte>8B</Byte>
+        <Byte>41</Byte>
+        <Byte>28</Byte>
+      </Before>
+      <Actual>
+        <Byte>FF</Byte>
+        <Byte>D0</Byte>
+      </Actual>
+      <After>
+        <Byte>44</Byte>
+        <Byte>8B</Byte>
+        <Byte>C0</Byte>
+        <Byte>8B</Byte>
+        <Byte>D3</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>something item related :mov rsi,rax</Description>
+      <AddressString>MonsterHunterRise.exe+3776D0C</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>A4</Byte>
+        <Byte>A4</Byte>
+        <Byte>4E</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>F0</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>AddItemsWrapper :test r8,r8</Description>
+      <AddressString>MonsterHunterRise.exe+17C42B0</AddressString>
+      <Before>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>4D</Byte>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>4F</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>get player from entity list? :mov r14,[rax+rbp*8+20]</Description>
+      <AddressString>MonsterHunterRise.exe+12D0D6B</AddressString>
+      <Before>
+        <Byte>09</Byte>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>43</Byte>
+        <Byte>58</Byte>
+      </Before>
+      <Actual>
+        <Byte>4C</Byte>
+        <Byte>8B</Byte>
+        <Byte>74</Byte>
+        <Byte>E8</Byte>
+        <Byte>20</Byte>
+      </Actual>
+      <After>
+        <Byte>4D</Byte>
+        <Byte>85</Byte>
+        <Byte>F6</Byte>
+        <Byte>74</Byte>
+        <Byte>0A</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>sellitem function? :test r8,r8</Description>
+      <AddressString>MonsterHunterRise.exe+22BF590</AddressString>
+      <Before>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>4D</Byte>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>06</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry GroupHeader="1">
+      <Description>test</Description>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>some item vtable caller? :mov rdx,[rsi+10]</Description>
+      <AddressString>MonsterHunterRise.exe+263467B</AddressString>
+      <Before>
+        <Byte>49</Byte>
+        <Byte>8B</Byte>
+        <Byte>E3</Byte>
+        <Byte>5F</Byte>
+        <Byte>C3</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>56</Byte>
+        <Byte>10</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>02</Byte>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>AddZenny_Call :lea rax,[rsp+18]</Description>
+      <AddressString>MonsterHunterRise.exe+1C68590</AddressString>
+      <Before>
+        <Byte>5E</Byte>
+        <Byte>5D</Byte>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>8D</Byte>
+        <Byte>44</Byte>
+        <Byte>24</Byte>
+        <Byte>18</Byte>
+      </Actual>
+      <After>
+        <Byte>4C</Byte>
+        <Byte>8B</Byte>
+        <Byte>D2</Byte>
+        <Byte>4C</Byte>
+        <Byte>8B</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+  <Structures StructVersion="2">
+    <Structure Name="Item" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+      <Elements>
+        <Element Offset="0" Vartype="Pointer" Bytesize="8" OffsetHex="00000000" DisplayMethod="unsigned integer">
+          <Structure Name="Autocreated from 29068278" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+            <Elements>
+              <Element Offset="0" Vartype="Pointer" Bytesize="8" OffsetHex="00000000" DisplayMethod="unsigned integer"/>
+              <Element Offset="8" Vartype="String" Bytesize="4" OffsetHex="00000008" DisplayMethod="unsigned integer"/>
+              <Element Offset="12" Vartype="Double" Bytesize="8" OffsetHex="0000000C" DisplayMethod="unsigned integer"/>
+              <Element Offset="20" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000014" DisplayMethod="unsigned integer"/>
+              <Element Offset="24" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000018" DisplayMethod="unsigned integer"/>
+              <Element Offset="56" Vartype="String" Bytesize="4" OffsetHex="00000038" DisplayMethod="unsigned integer"/>
+              <Element Offset="60" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="0000003C" DisplayMethod="unsigned integer"/>
+              <Element Offset="92" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000005C" DisplayMethod="unsigned integer"/>
+              <Element Offset="96" Vartype="Pointer" Bytesize="8" RLECount="9" OffsetHex="00000060" DisplayMethod="unsigned integer"/>
+              <Element Offset="168" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000000A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="176" Vartype="Pointer" Bytesize="8" OffsetHex="000000B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="184" Vartype="String" Bytesize="4" OffsetHex="000000B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="188" Vartype="Double" Bytesize="8" OffsetHex="000000BC" DisplayMethod="unsigned integer"/>
+              <Element Offset="196" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="200" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000000C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="232" Vartype="String" Bytesize="4" OffsetHex="000000E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="236" Vartype="Double" Bytesize="8" RLECount="7" OffsetHex="000000EC" DisplayMethod="unsigned integer"/>
+              <Element Offset="292" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000124" DisplayMethod="unsigned integer"/>
+              <Element Offset="296" Vartype="Pointer" Bytesize="8" RLECount="2" OffsetHex="00000128" DisplayMethod="unsigned integer"/>
+              <Element Offset="312" Vartype="String" Bytesize="4" OffsetHex="00000138" DisplayMethod="unsigned integer"/>
+              <Element Offset="316" Vartype="Double" Bytesize="8" OffsetHex="0000013C" DisplayMethod="unsigned integer"/>
+              <Element Offset="324" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000144" DisplayMethod="unsigned integer"/>
+              <Element Offset="328" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000148" DisplayMethod="unsigned integer"/>
+              <Element Offset="352" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="00000160" DisplayMethod="unsigned integer"/>
+              <Element Offset="355" Vartype="2 Bytes" Bytesize="2" OffsetHex="00000163" DisplayMethod="unsigned integer"/>
+              <Element Offset="357" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="00000165" DisplayMethod="unsigned integer"/>
+              <Element Offset="363" Vartype="2 Bytes" Bytesize="2" OffsetHex="0000016B" DisplayMethod="unsigned integer"/>
+              <Element Offset="365" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="0000016D" DisplayMethod="unsigned integer"/>
+              <Element Offset="371" Vartype="2 Bytes" Bytesize="2" OffsetHex="00000173" DisplayMethod="unsigned integer"/>
+              <Element Offset="373" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="00000175" DisplayMethod="unsigned integer"/>
+              <Element Offset="379" Vartype="2 Bytes" Bytesize="2" OffsetHex="0000017B" DisplayMethod="unsigned integer"/>
+              <Element Offset="381" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="0000017D" DisplayMethod="unsigned integer"/>
+              <Element Offset="387" Vartype="2 Bytes" Bytesize="2" OffsetHex="00000183" DisplayMethod="unsigned integer"/>
+              <Element Offset="389" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="00000185" DisplayMethod="unsigned integer"/>
+              <Element Offset="395" Vartype="2 Bytes" Bytesize="2" OffsetHex="0000018B" DisplayMethod="unsigned integer"/>
+              <Element Offset="397" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="0000018D" DisplayMethod="unsigned integer"/>
+              <Element Offset="400" Vartype="String" Bytesize="4" OffsetHex="00000190" DisplayMethod="unsigned integer"/>
+              <Element Offset="404" Vartype="Double" Bytesize="8" RLECount="14" OffsetHex="00000194" DisplayMethod="unsigned integer"/>
+              <Element Offset="516" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000204" DisplayMethod="unsigned integer"/>
+              <Element Offset="520" Vartype="Pointer" Bytesize="8" OffsetHex="00000208" DisplayMethod="unsigned integer"/>
+              <Element Offset="528" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000210" DisplayMethod="unsigned integer"/>
+              <Element Offset="536" Vartype="Pointer" Bytesize="8" OffsetHex="00000218" DisplayMethod="unsigned integer"/>
+              <Element Offset="544" Vartype="4 Bytes" Bytesize="4" RLECount="25" OffsetHex="00000220" DisplayMethod="unsigned integer"/>
+              <Element Offset="644" Vartype="Double" Bytesize="8" RLECount="10" OffsetHex="00000284" DisplayMethod="unsigned integer"/>
+              <Element Offset="724" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002D4" DisplayMethod="unsigned integer"/>
+              <Element Offset="728" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="000002D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="752" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000002F0" DisplayMethod="unsigned integer"/>
+              <Element Offset="768" Vartype="Pointer" Bytesize="8" OffsetHex="00000300" DisplayMethod="unsigned integer"/>
+              <Element Offset="776" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000308" DisplayMethod="unsigned integer"/>
+              <Element Offset="784" Vartype="Pointer" Bytesize="8" OffsetHex="00000310" DisplayMethod="unsigned integer"/>
+              <Element Offset="792" Vartype="String" Bytesize="4" OffsetHex="00000318" DisplayMethod="unsigned integer"/>
+              <Element Offset="796" Vartype="Double" Bytesize="8" OffsetHex="0000031C" DisplayMethod="unsigned integer"/>
+              <Element Offset="804" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000324" DisplayMethod="unsigned integer"/>
+              <Element Offset="808" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000328" DisplayMethod="unsigned integer"/>
+              <Element Offset="840" Vartype="String" Bytesize="4" OffsetHex="00000348" DisplayMethod="unsigned integer"/>
+              <Element Offset="844" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="0000034C" DisplayMethod="unsigned integer"/>
+              <Element Offset="916" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000394" DisplayMethod="unsigned integer"/>
+              <Element Offset="920" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000398" DisplayMethod="unsigned integer"/>
+              <Element Offset="944" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="000003B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1016" Vartype="Pointer" Bytesize="8" OffsetHex="000003F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1024" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000400" DisplayMethod="unsigned integer"/>
+              <Element Offset="1032" Vartype="Pointer" Bytesize="8" OffsetHex="00000408" DisplayMethod="unsigned integer"/>
+              <Element Offset="1040" Vartype="String" Bytesize="4" OffsetHex="00000410" DisplayMethod="unsigned integer"/>
+              <Element Offset="1044" Vartype="Double" Bytesize="8" OffsetHex="00000414" DisplayMethod="unsigned integer"/>
+              <Element Offset="1052" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000041C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1056" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000420" DisplayMethod="unsigned integer"/>
+              <Element Offset="1088" Vartype="String" Bytesize="4" OffsetHex="00000440" DisplayMethod="unsigned integer"/>
+              <Element Offset="1092" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="00000444" DisplayMethod="unsigned integer"/>
+              <Element Offset="1276" Vartype="4 Bytes" Bytesize="4" OffsetHex="000004FC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1280" Vartype="Pointer" Bytesize="8" OffsetHex="00000500" DisplayMethod="unsigned integer"/>
+              <Element Offset="1288" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000508" DisplayMethod="unsigned integer"/>
+              <Element Offset="1296" Vartype="Pointer" Bytesize="8" OffsetHex="00000510" DisplayMethod="unsigned integer"/>
+              <Element Offset="1304" Vartype="String" Bytesize="4" OffsetHex="00000518" DisplayMethod="unsigned integer"/>
+              <Element Offset="1308" Vartype="Double" Bytesize="8" OffsetHex="0000051C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1316" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000524" DisplayMethod="unsigned integer"/>
+              <Element Offset="1320" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000528" DisplayMethod="unsigned integer"/>
+              <Element Offset="1352" Vartype="String" Bytesize="4" OffsetHex="00000548" DisplayMethod="unsigned integer"/>
+              <Element Offset="1356" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="0000054C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1388" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000056C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1392" Vartype="Pointer" Bytesize="8" RLECount="9" OffsetHex="00000570" DisplayMethod="unsigned integer"/>
+              <Element Offset="1464" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000005B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1472" Vartype="Pointer" Bytesize="8" OffsetHex="000005C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1480" Vartype="String" Bytesize="4" OffsetHex="000005C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1484" Vartype="Double" Bytesize="8" OffsetHex="000005CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1492" Vartype="4 Bytes" Bytesize="4" OffsetHex="000005D4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1496" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000005D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1528" Vartype="String" Bytesize="4" OffsetHex="000005F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1532" Vartype="Double" Bytesize="8" RLECount="7" OffsetHex="000005FC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1588" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000634" DisplayMethod="unsigned integer"/>
+              <Element Offset="1592" Vartype="Pointer" Bytesize="8" RLECount="2" OffsetHex="00000638" DisplayMethod="unsigned integer"/>
+              <Element Offset="1608" Vartype="String" Bytesize="4" OffsetHex="00000648" DisplayMethod="unsigned integer"/>
+              <Element Offset="1612" Vartype="Double" Bytesize="8" OffsetHex="0000064C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1620" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000654" DisplayMethod="unsigned integer"/>
+              <Element Offset="1624" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000658" DisplayMethod="unsigned integer"/>
+              <Element Offset="1648" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="00000670" DisplayMethod="unsigned integer"/>
+              <Element Offset="1651" Vartype="2 Bytes" Bytesize="2" OffsetHex="00000673" DisplayMethod="unsigned integer"/>
+              <Element Offset="1653" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="00000675" DisplayMethod="unsigned integer"/>
+              <Element Offset="1659" Vartype="2 Bytes" Bytesize="2" OffsetHex="0000067B" DisplayMethod="unsigned integer"/>
+              <Element Offset="1661" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="0000067D" DisplayMethod="unsigned integer"/>
+              <Element Offset="1664" Vartype="Pointer" Bytesize="8" RLECount="2" OffsetHex="00000680" DisplayMethod="unsigned integer"/>
+              <Element Offset="1680" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="00000690" DisplayMethod="unsigned integer"/>
+              <Element Offset="1683" Vartype="2 Bytes" Bytesize="2" OffsetHex="00000693" DisplayMethod="unsigned integer"/>
+              <Element Offset="1685" Vartype="Byte" Bytesize="1" RLECount="6" OffsetHex="00000695" DisplayMethod="unsigned integer"/>
+              <Element Offset="1691" Vartype="2 Bytes" Bytesize="2" OffsetHex="0000069B" DisplayMethod="unsigned integer"/>
+              <Element Offset="1693" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="0000069D" DisplayMethod="unsigned integer"/>
+              <Element Offset="1696" Vartype="String" Bytesize="4" OffsetHex="000006A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1700" Vartype="Double" Bytesize="8" RLECount="14" OffsetHex="000006A4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1812" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000714" DisplayMethod="unsigned integer"/>
+              <Element Offset="1816" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000718" DisplayMethod="unsigned integer"/>
+              <Element Offset="1840" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000730" DisplayMethod="unsigned integer"/>
+              <Element Offset="1848" Vartype="Pointer" Bytesize="8" OffsetHex="00000738" DisplayMethod="unsigned integer"/>
+              <Element Offset="1856" Vartype="String" Bytesize="4" OffsetHex="00000740" DisplayMethod="unsigned integer"/>
+              <Element Offset="1860" Vartype="Double" Bytesize="8" OffsetHex="00000744" DisplayMethod="unsigned integer"/>
+              <Element Offset="1868" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000074C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1872" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000750" DisplayMethod="unsigned integer"/>
+              <Element Offset="1904" Vartype="String" Bytesize="4" OffsetHex="00000770" DisplayMethod="unsigned integer"/>
+              <Element Offset="1908" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000774" DisplayMethod="unsigned integer"/>
+              <Element Offset="1940" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000794" DisplayMethod="unsigned integer"/>
+              <Element Offset="1944" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000798" DisplayMethod="unsigned integer"/>
+              <Element Offset="1968" Vartype="String" Bytesize="4" OffsetHex="000007B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1972" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="000007B4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1988" Vartype="4 Bytes" Bytesize="4" OffsetHex="000007C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1992" Vartype="Pointer" Bytesize="8" OffsetHex="000007C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2000" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000007D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2008" Vartype="Pointer" Bytesize="8" OffsetHex="000007D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2016" Vartype="4 Bytes" Bytesize="4" RLECount="25" OffsetHex="000007E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2116" Vartype="Double" Bytesize="8" RLECount="10" OffsetHex="00000844" DisplayMethod="unsigned integer"/>
+              <Element Offset="2196" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000894" DisplayMethod="unsigned integer"/>
+              <Element Offset="2200" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000898" DisplayMethod="unsigned integer"/>
+              <Element Offset="2224" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000008B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2240" Vartype="Pointer" Bytesize="8" OffsetHex="000008C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2248" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000008C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2256" Vartype="Pointer" Bytesize="8" OffsetHex="000008D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2264" Vartype="String" Bytesize="4" OffsetHex="000008D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2268" Vartype="Double" Bytesize="8" OffsetHex="000008DC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2276" Vartype="4 Bytes" Bytesize="4" OffsetHex="000008E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2280" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000008E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2312" Vartype="String" Bytesize="4" OffsetHex="00000908" DisplayMethod="unsigned integer"/>
+              <Element Offset="2316" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="0000090C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2388" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000954" DisplayMethod="unsigned integer"/>
+              <Element Offset="2392" Vartype="Pointer" Bytesize="8" OffsetHex="00000958" DisplayMethod="unsigned integer"/>
+              <Element Offset="2400" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000960" DisplayMethod="unsigned integer"/>
+              <Element Offset="2408" Vartype="Pointer" Bytesize="8" OffsetHex="00000968" DisplayMethod="unsigned integer"/>
+              <Element Offset="2416" Vartype="String" Bytesize="4" OffsetHex="00000970" DisplayMethod="unsigned integer"/>
+              <Element Offset="2420" Vartype="Double" Bytesize="8" OffsetHex="00000974" DisplayMethod="unsigned integer"/>
+              <Element Offset="2428" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000097C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2432" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000980" DisplayMethod="unsigned integer"/>
+              <Element Offset="2464" Vartype="String" Bytesize="4" OffsetHex="000009A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2468" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="000009A4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2500" Vartype="4 Bytes" Bytesize="4" OffsetHex="000009C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2504" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="000009C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2528" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="000009E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2600" Vartype="Pointer" Bytesize="8" OffsetHex="00000A28" DisplayMethod="unsigned integer"/>
+              <Element Offset="2608" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000A30" DisplayMethod="unsigned integer"/>
+              <Element Offset="2616" Vartype="Pointer" Bytesize="8" OffsetHex="00000A38" DisplayMethod="unsigned integer"/>
+              <Element Offset="2624" Vartype="String" Bytesize="4" OffsetHex="00000A40" DisplayMethod="unsigned integer"/>
+              <Element Offset="2628" Vartype="Double" Bytesize="8" OffsetHex="00000A44" DisplayMethod="unsigned integer"/>
+              <Element Offset="2636" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000A4C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2640" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000A50" DisplayMethod="unsigned integer"/>
+              <Element Offset="2672" Vartype="String" Bytesize="4" OffsetHex="00000A70" DisplayMethod="unsigned integer"/>
+              <Element Offset="2676" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="00000A74" DisplayMethod="unsigned integer"/>
+              <Element Offset="2860" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000B2C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2864" Vartype="Pointer" Bytesize="8" RLECount="9" OffsetHex="00000B30" DisplayMethod="unsigned integer"/>
+              <Element Offset="2936" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000B78" DisplayMethod="unsigned integer"/>
+              <Element Offset="2944" Vartype="Pointer" Bytesize="8" OffsetHex="00000B80" DisplayMethod="unsigned integer"/>
+              <Element Offset="2952" Vartype="String" Bytesize="4" OffsetHex="00000B88" DisplayMethod="unsigned integer"/>
+              <Element Offset="2956" Vartype="Double" Bytesize="8" OffsetHex="00000B8C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2964" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000B94" DisplayMethod="unsigned integer"/>
+              <Element Offset="2968" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000B98" DisplayMethod="unsigned integer"/>
+              <Element Offset="3000" Vartype="String" Bytesize="4" OffsetHex="00000BB8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3004" Vartype="Double" Bytesize="8" RLECount="35" OffsetHex="00000BBC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3284" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000CD4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3288" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000CD8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3312" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000CF0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3328" Vartype="Pointer" Bytesize="8" OffsetHex="00000D00" DisplayMethod="unsigned integer"/>
+              <Element Offset="3336" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000D08" DisplayMethod="unsigned integer"/>
+              <Element Offset="3344" Vartype="Pointer" Bytesize="8" OffsetHex="00000D10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3352" Vartype="String" Bytesize="4" OffsetHex="00000D18" DisplayMethod="unsigned integer"/>
+              <Element Offset="3356" Vartype="Double" Bytesize="8" OffsetHex="00000D1C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3364" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000D24" DisplayMethod="unsigned integer"/>
+              <Element Offset="3368" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000D28" DisplayMethod="unsigned integer"/>
+              <Element Offset="3400" Vartype="String" Bytesize="4" OffsetHex="00000D48" DisplayMethod="unsigned integer"/>
+              <Element Offset="3404" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000D4C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3476" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000D94" DisplayMethod="unsigned integer"/>
+              <Element Offset="3480" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000D98" DisplayMethod="unsigned integer"/>
+              <Element Offset="3504" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="00000DB0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3576" Vartype="Pointer" Bytesize="8" OffsetHex="00000DF8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3584" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000E00" DisplayMethod="unsigned integer"/>
+              <Element Offset="3592" Vartype="Pointer" Bytesize="8" OffsetHex="00000E08" DisplayMethod="unsigned integer"/>
+              <Element Offset="3600" Vartype="String" Bytesize="4" OffsetHex="00000E10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3604" Vartype="Double" Bytesize="8" OffsetHex="00000E14" DisplayMethod="unsigned integer"/>
+              <Element Offset="3612" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000E1C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3616" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000E20" DisplayMethod="unsigned integer"/>
+              <Element Offset="3648" Vartype="String" Bytesize="4" OffsetHex="00000E40" DisplayMethod="unsigned integer"/>
+              <Element Offset="3652" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="00000E44" DisplayMethod="unsigned integer"/>
+              <Element Offset="3836" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000EFC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3840" Vartype="Pointer" Bytesize="8" OffsetHex="00000F00" DisplayMethod="unsigned integer"/>
+              <Element Offset="3848" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000F08" DisplayMethod="unsigned integer"/>
+              <Element Offset="3856" Vartype="Pointer" Bytesize="8" OffsetHex="00000F10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3864" Vartype="String" Bytesize="4" OffsetHex="00000F18" DisplayMethod="unsigned integer"/>
+              <Element Offset="3868" Vartype="Double" Bytesize="8" OffsetHex="00000F1C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3876" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000F24" DisplayMethod="unsigned integer"/>
+              <Element Offset="3880" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000F28" DisplayMethod="unsigned integer"/>
+              <Element Offset="3912" Vartype="String" Bytesize="4" OffsetHex="00000F48" DisplayMethod="unsigned integer"/>
+              <Element Offset="3916" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000F4C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3948" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000F6C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3952" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000F70" DisplayMethod="unsigned integer"/>
+              <Element Offset="3976" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000F88" DisplayMethod="unsigned integer"/>
+              <Element Offset="3992" Vartype="Pointer" Bytesize="8" OffsetHex="00000F98" DisplayMethod="unsigned integer"/>
+              <Element Offset="4000" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000FA0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4008" Vartype="Pointer" Bytesize="8" OffsetHex="00000FA8" DisplayMethod="unsigned integer"/>
+              <Element Offset="4016" Vartype="String" Bytesize="4" OffsetHex="00000FB0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4020" Vartype="Double" Bytesize="8" OffsetHex="00000FB4" DisplayMethod="unsigned integer"/>
+              <Element Offset="4028" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000FBC" DisplayMethod="unsigned integer"/>
+              <Element Offset="4032" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000FC0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4064" Vartype="String" Bytesize="4" OffsetHex="00000FE0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4068" Vartype="Double" Bytesize="8" RLECount="3" OffsetHex="00000FE4" DisplayMethod="unsigned integer"/>
+              <Element Offset="4092" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000FFC" DisplayMethod="unsigned integer"/>
+            </Elements>
+          </Structure>
+        </Element>
+        <Element Offset="8" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000008" DisplayMethod="unsigned integer"/>
+        <Element Offset="12" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000000C" DisplayMethod="hexadecimal"/>
+        <Element Offset="16" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000010" Description="Item ID" DisplayMethod="hexadecimal"/>
+        <Element Offset="20" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000014" Description="Quantity" DisplayMethod="unsigned integer"/>
+        <Element Offset="24" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000018" DisplayMethod="unsigned integer"/>
+        <Element Offset="32" Vartype="Pointer" Bytesize="8" OffsetHex="00000020" DisplayMethod="unsigned integer">
+          <Structure Name="Autocreated from 28A69638" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+            <Elements>
+              <Element Offset="0" Vartype="Pointer" Bytesize="8" OffsetHex="00000000" DisplayMethod="unsigned integer"/>
+              <Element Offset="8" Vartype="String" Bytesize="4" OffsetHex="00000008" DisplayMethod="unsigned integer"/>
+              <Element Offset="12" Vartype="Double" Bytesize="8" OffsetHex="0000000C" DisplayMethod="unsigned integer"/>
+              <Element Offset="20" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000014" DisplayMethod="unsigned integer"/>
+              <Element Offset="24" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000018" DisplayMethod="unsigned integer"/>
+              <Element Offset="56" Vartype="String" Bytesize="4" OffsetHex="00000038" DisplayMethod="unsigned integer"/>
+              <Element Offset="60" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="0000003C" DisplayMethod="unsigned integer"/>
+              <Element Offset="92" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000005C" DisplayMethod="unsigned integer"/>
+              <Element Offset="96" Vartype="Pointer" Bytesize="8" OffsetHex="00000060" DisplayMethod="unsigned integer"/>
+              <Element Offset="104" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000068" DisplayMethod="unsigned integer"/>
+              <Element Offset="112" Vartype="Pointer" Bytesize="8" OffsetHex="00000070" DisplayMethod="unsigned integer"/>
+              <Element Offset="120" Vartype="String" Bytesize="4" OffsetHex="00000078" DisplayMethod="unsigned integer"/>
+              <Element Offset="124" Vartype="Double" Bytesize="8" OffsetHex="0000007C" DisplayMethod="unsigned integer"/>
+              <Element Offset="132" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000084" DisplayMethod="unsigned integer"/>
+              <Element Offset="136" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000088" DisplayMethod="unsigned integer"/>
+              <Element Offset="168" Vartype="String" Bytesize="4" OffsetHex="000000A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="172" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="000000AC" DisplayMethod="unsigned integer"/>
+              <Element Offset="204" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="208" Vartype="Pointer" Bytesize="8" OffsetHex="000000D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="216" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000000D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="224" Vartype="Pointer" Bytesize="8" OffsetHex="000000E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="232" Vartype="String" Bytesize="4" OffsetHex="000000E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="236" Vartype="Double" Bytesize="8" OffsetHex="000000EC" DisplayMethod="unsigned integer"/>
+              <Element Offset="244" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000F4" DisplayMethod="unsigned integer"/>
+              <Element Offset="248" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000000F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="280" Vartype="String" Bytesize="4" OffsetHex="00000118" DisplayMethod="unsigned integer"/>
+              <Element Offset="284" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="0000011C" DisplayMethod="unsigned integer"/>
+              <Element Offset="316" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000013C" DisplayMethod="unsigned integer"/>
+              <Element Offset="320" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000140" DisplayMethod="unsigned integer"/>
+              <Element Offset="344" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="00000158" DisplayMethod="unsigned integer"/>
+              <Element Offset="416" Vartype="Pointer" Bytesize="8" OffsetHex="000001A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="424" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000001A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="432" Vartype="Pointer" Bytesize="8" OffsetHex="000001B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="440" Vartype="String" Bytesize="4" OffsetHex="000001B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="444" Vartype="Double" Bytesize="8" OffsetHex="000001BC" DisplayMethod="unsigned integer"/>
+              <Element Offset="452" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="456" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000001C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="488" Vartype="String" Bytesize="4" OffsetHex="000001E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="492" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="000001EC" DisplayMethod="unsigned integer"/>
+              <Element Offset="676" Vartype="4 Bytes" Bytesize="4" OffsetHex="000002A4" DisplayMethod="unsigned integer"/>
+              <Element Offset="680" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="000002A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="704" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="000002C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="776" Vartype="Pointer" Bytesize="8" OffsetHex="00000308" DisplayMethod="unsigned integer"/>
+              <Element Offset="784" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000310" DisplayMethod="unsigned integer"/>
+              <Element Offset="792" Vartype="Pointer" Bytesize="8" OffsetHex="00000318" DisplayMethod="unsigned integer"/>
+              <Element Offset="800" Vartype="String" Bytesize="4" OffsetHex="00000320" DisplayMethod="unsigned integer"/>
+              <Element Offset="804" Vartype="Double" Bytesize="8" OffsetHex="00000324" DisplayMethod="unsigned integer"/>
+              <Element Offset="812" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000032C" DisplayMethod="unsigned integer"/>
+              <Element Offset="816" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000330" DisplayMethod="unsigned integer"/>
+              <Element Offset="848" Vartype="String" Bytesize="4" OffsetHex="00000350" DisplayMethod="unsigned integer"/>
+              <Element Offset="852" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="00000354" DisplayMethod="unsigned integer"/>
+              <Element Offset="1036" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000040C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1040" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000410" DisplayMethod="unsigned integer"/>
+              <Element Offset="1064" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000428" DisplayMethod="unsigned integer"/>
+              <Element Offset="1080" Vartype="Pointer" Bytesize="8" OffsetHex="00000438" DisplayMethod="unsigned integer"/>
+              <Element Offset="1088" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000440" DisplayMethod="unsigned integer"/>
+              <Element Offset="1096" Vartype="Pointer" Bytesize="8" OffsetHex="00000448" DisplayMethod="unsigned integer"/>
+              <Element Offset="1104" Vartype="String" Bytesize="4" OffsetHex="00000450" DisplayMethod="unsigned integer"/>
+              <Element Offset="1108" Vartype="Double" Bytesize="8" OffsetHex="00000454" DisplayMethod="unsigned integer"/>
+              <Element Offset="1116" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000045C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1120" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000460" DisplayMethod="unsigned integer"/>
+              <Element Offset="1152" Vartype="String" Bytesize="4" OffsetHex="00000480" DisplayMethod="unsigned integer"/>
+              <Element Offset="1156" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000484" DisplayMethod="unsigned integer"/>
+              <Element Offset="1228" Vartype="4 Bytes" Bytesize="4" OffsetHex="000004CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1232" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="000004D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1256" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000004E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1272" Vartype="Pointer" Bytesize="8" OffsetHex="000004F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1280" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000500" DisplayMethod="unsigned integer"/>
+              <Element Offset="1288" Vartype="Pointer" Bytesize="8" OffsetHex="00000508" DisplayMethod="unsigned integer"/>
+              <Element Offset="1296" Vartype="String" Bytesize="4" OffsetHex="00000510" DisplayMethod="unsigned integer"/>
+              <Element Offset="1300" Vartype="Double" Bytesize="8" OffsetHex="00000514" DisplayMethod="unsigned integer"/>
+              <Element Offset="1308" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000051C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1312" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000520" DisplayMethod="unsigned integer"/>
+              <Element Offset="1344" Vartype="String" Bytesize="4" OffsetHex="00000540" DisplayMethod="unsigned integer"/>
+              <Element Offset="1348" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000544" DisplayMethod="unsigned integer"/>
+              <Element Offset="1420" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000058C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1424" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000590" DisplayMethod="unsigned integer"/>
+              <Element Offset="1448" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000005A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1464" Vartype="Pointer" Bytesize="8" OffsetHex="000005B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1472" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000005C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1480" Vartype="Pointer" Bytesize="8" OffsetHex="000005C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1488" Vartype="String" Bytesize="4" OffsetHex="000005D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1492" Vartype="Double" Bytesize="8" OffsetHex="000005D4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1500" Vartype="4 Bytes" Bytesize="4" OffsetHex="000005DC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1504" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000005E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1536" Vartype="String" Bytesize="4" OffsetHex="00000600" DisplayMethod="unsigned integer"/>
+              <Element Offset="1540" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000604" DisplayMethod="unsigned integer"/>
+              <Element Offset="1612" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000064C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1616" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000650" DisplayMethod="unsigned integer"/>
+              <Element Offset="1640" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="00000668" DisplayMethod="unsigned integer"/>
+              <Element Offset="1712" Vartype="Pointer" Bytesize="8" OffsetHex="000006B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1720" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000006B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1728" Vartype="Pointer" Bytesize="8" OffsetHex="000006C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1736" Vartype="String" Bytesize="4" OffsetHex="000006C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1740" Vartype="Double" Bytesize="8" OffsetHex="000006CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1748" Vartype="4 Bytes" Bytesize="4" OffsetHex="000006D4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1752" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000006D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1784" Vartype="String" Bytesize="4" OffsetHex="000006F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1788" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="000006FC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1972" Vartype="4 Bytes" Bytesize="4" OffsetHex="000007B4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1976" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="000007B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2000" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000007D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2016" Vartype="Pointer" Bytesize="8" OffsetHex="000007E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2024" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000007E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2032" Vartype="Pointer" Bytesize="8" OffsetHex="000007F0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2040" Vartype="String" Bytesize="4" OffsetHex="000007F8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2044" Vartype="Double" Bytesize="8" OffsetHex="000007FC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2052" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000804" DisplayMethod="unsigned integer"/>
+              <Element Offset="2056" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000808" DisplayMethod="unsigned integer"/>
+              <Element Offset="2088" Vartype="String" Bytesize="4" OffsetHex="00000828" DisplayMethod="unsigned integer"/>
+              <Element Offset="2092" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="0000082C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2164" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000874" DisplayMethod="unsigned integer"/>
+              <Element Offset="2168" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000878" DisplayMethod="unsigned integer"/>
+              <Element Offset="2248" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000008C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2256" Vartype="Pointer" Bytesize="8" OffsetHex="000008D0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2264" Vartype="String" Bytesize="4" OffsetHex="000008D8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2268" Vartype="Double" Bytesize="8" OffsetHex="000008DC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2276" Vartype="4 Bytes" Bytesize="4" OffsetHex="000008E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2280" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000008E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2312" Vartype="String" Bytesize="4" OffsetHex="00000908" DisplayMethod="unsigned integer"/>
+              <Element Offset="2316" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="0000090C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2604" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000A2C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2608" Vartype="Pointer" Bytesize="8" OffsetHex="00000A30" DisplayMethod="unsigned integer"/>
+              <Element Offset="2616" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000A38" DisplayMethod="unsigned integer"/>
+              <Element Offset="2624" Vartype="Pointer" Bytesize="8" OffsetHex="00000A40" DisplayMethod="unsigned integer"/>
+              <Element Offset="2632" Vartype="String" Bytesize="4" OffsetHex="00000A48" DisplayMethod="unsigned integer"/>
+              <Element Offset="2636" Vartype="Double" Bytesize="8" OffsetHex="00000A4C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2644" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000A54" DisplayMethod="unsigned integer"/>
+              <Element Offset="2648" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000A58" DisplayMethod="unsigned integer"/>
+              <Element Offset="2680" Vartype="String" Bytesize="4" OffsetHex="00000A78" DisplayMethod="unsigned integer"/>
+              <Element Offset="2684" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000A7C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2716" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000A9C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2720" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000AA0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2744" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000AB8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2760" Vartype="Pointer" Bytesize="8" OffsetHex="00000AC8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2768" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000AD0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2776" Vartype="Pointer" Bytesize="8" OffsetHex="00000AD8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2784" Vartype="String" Bytesize="4" OffsetHex="00000AE0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2788" Vartype="Double" Bytesize="8" OffsetHex="00000AE4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2796" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000AEC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2800" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000AF0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2832" Vartype="String" Bytesize="4" OffsetHex="00000B10" DisplayMethod="unsigned integer"/>
+              <Element Offset="2836" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000B14" DisplayMethod="unsigned integer"/>
+              <Element Offset="2908" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000B5C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2912" Vartype="Pointer" Bytesize="8" OffsetHex="00000B60" DisplayMethod="unsigned integer"/>
+              <Element Offset="2920" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000B68" DisplayMethod="unsigned integer"/>
+              <Element Offset="2928" Vartype="Pointer" Bytesize="8" OffsetHex="00000B70" DisplayMethod="unsigned integer"/>
+              <Element Offset="2936" Vartype="4 Bytes" Bytesize="4" RLECount="45" OffsetHex="00000B78" DisplayMethod="unsigned integer"/>
+              <Element Offset="3116" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000C2C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3148" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000C4C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3152" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000C50" DisplayMethod="unsigned integer"/>
+              <Element Offset="3176" Vartype="String" Bytesize="4" OffsetHex="00000C68" DisplayMethod="unsigned integer"/>
+              <Element Offset="3180" Vartype="Double" Bytesize="8" RLECount="8" OffsetHex="00000C6C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3244" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000CAC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3248" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000CB0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3328" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000D00" DisplayMethod="unsigned integer"/>
+              <Element Offset="3336" Vartype="Pointer" Bytesize="8" OffsetHex="00000D08" DisplayMethod="unsigned integer"/>
+              <Element Offset="3344" Vartype="String" Bytesize="4" OffsetHex="00000D10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3348" Vartype="Double" Bytesize="8" OffsetHex="00000D14" DisplayMethod="unsigned integer"/>
+              <Element Offset="3356" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000D1C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3360" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000D20" DisplayMethod="unsigned integer"/>
+              <Element Offset="3392" Vartype="String" Bytesize="4" OffsetHex="00000D40" DisplayMethod="unsigned integer"/>
+              <Element Offset="3396" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="00000D44" DisplayMethod="unsigned integer"/>
+              <Element Offset="3684" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000E64" DisplayMethod="unsigned integer"/>
+              <Element Offset="3688" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000E68" DisplayMethod="unsigned integer"/>
+              <Element Offset="3712" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="00000E80" DisplayMethod="unsigned integer"/>
+              <Element Offset="3784" Vartype="Pointer" Bytesize="8" OffsetHex="00000EC8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3792" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000ED0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3800" Vartype="Pointer" Bytesize="8" OffsetHex="00000ED8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3808" Vartype="String" Bytesize="4" OffsetHex="00000EE0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3812" Vartype="Double" Bytesize="8" OffsetHex="00000EE4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3820" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000EEC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3824" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000EF0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3856" Vartype="String" Bytesize="4" OffsetHex="00000F10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3860" Vartype="Double" Bytesize="8" RLECount="23" OffsetHex="00000F14" DisplayMethod="unsigned integer"/>
+              <Element Offset="4044" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000FCC" DisplayMethod="unsigned integer"/>
+              <Element Offset="4048" Vartype="Pointer" Bytesize="8" OffsetHex="00000FD0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4056" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000FD8" DisplayMethod="unsigned integer"/>
+              <Element Offset="4064" Vartype="Pointer" Bytesize="8" OffsetHex="00000FE0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4072" Vartype="String" Bytesize="4" OffsetHex="00000FE8" DisplayMethod="unsigned integer"/>
+              <Element Offset="4076" Vartype="Double" Bytesize="8" OffsetHex="00000FEC" DisplayMethod="unsigned integer"/>
+              <Element Offset="4084" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000FF4" DisplayMethod="unsigned integer"/>
+              <Element Offset="4088" Vartype="Pointer" Bytesize="8" OffsetHex="00000FF8" DisplayMethod="unsigned integer"/>
+            </Elements>
+          </Structure>
+        </Element>
+        <Element Offset="40" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000028" DisplayMethod="unsigned integer"/>
+        <Element Offset="44" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000002C" DisplayMethod="hexadecimal"/>
+        <Element Offset="48" Vartype="Pointer" Bytesize="8" OffsetHex="00000030" DisplayMethod="unsigned integer">
+          <Structure Name="Autocreated from 28C6D298" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+            <Elements>
+              <Element Offset="0" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000000" DisplayMethod="unsigned integer"/>
+              <Element Offset="4" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000004" DisplayMethod="unsigned integer"/>
+              <Element Offset="20" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000014" DisplayMethod="unsigned integer"/>
+              <Element Offset="24" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000018" DisplayMethod="unsigned integer"/>
+              <Element Offset="56" Vartype="String" Bytesize="4" OffsetHex="00000038" DisplayMethod="unsigned integer"/>
+              <Element Offset="60" Vartype="Double" Bytesize="8" RLECount="10" OffsetHex="0000003C" DisplayMethod="unsigned integer"/>
+              <Element Offset="140" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000008C" DisplayMethod="unsigned integer"/>
+              <Element Offset="144" Vartype="Pointer" Bytesize="8" RLECount="3" OffsetHex="00000090" DisplayMethod="unsigned integer"/>
+              <Element Offset="168" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="000000A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="184" Vartype="Pointer" Bytesize="8" OffsetHex="000000B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="192" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000000C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="200" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="000000C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="204" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="000000CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="220" Vartype="4 Bytes" Bytesize="4" OffsetHex="000000DC" DisplayMethod="unsigned integer"/>
+              <Element Offset="224" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000000E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="256" Vartype="String" Bytesize="4" OffsetHex="00000100" DisplayMethod="unsigned integer"/>
+              <Element Offset="260" Vartype="Double" Bytesize="8" RLECount="9" OffsetHex="00000104" DisplayMethod="unsigned integer"/>
+              <Element Offset="332" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000014C" DisplayMethod="unsigned integer"/>
+              <Element Offset="336" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000150" DisplayMethod="unsigned integer"/>
+              <Element Offset="416" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000001A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="424" Vartype="String" Bytesize="4" OffsetHex="000001A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="428" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="000001AC" DisplayMethod="unsigned integer"/>
+              <Element Offset="444" Vartype="4 Bytes" Bytesize="4" OffsetHex="000001BC" DisplayMethod="unsigned integer"/>
+              <Element Offset="448" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000001C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="480" Vartype="String" Bytesize="4" OffsetHex="000001E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="484" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="000001E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="772" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000304" DisplayMethod="unsigned integer"/>
+              <Element Offset="776" Vartype="Pointer" Bytesize="8" RLECount="6" OffsetHex="00000308" DisplayMethod="unsigned integer"/>
+              <Element Offset="824" Vartype="4 Bytes" Bytesize="4" RLECount="4" OffsetHex="00000338" DisplayMethod="unsigned integer"/>
+              <Element Offset="840" Vartype="Pointer" Bytesize="8" OffsetHex="00000348" DisplayMethod="unsigned integer"/>
+              <Element Offset="848" Vartype="4 Bytes" Bytesize="4" RLECount="18" OffsetHex="00000350" DisplayMethod="unsigned integer"/>
+              <Element Offset="920" Vartype="Pointer" Bytesize="8" OffsetHex="00000398" DisplayMethod="unsigned integer"/>
+              <Element Offset="928" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000003A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="936" Vartype="String" Bytesize="4" OffsetHex="000003A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="940" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="000003AC" DisplayMethod="unsigned integer"/>
+              <Element Offset="956" Vartype="4 Bytes" Bytesize="4" OffsetHex="000003BC" DisplayMethod="unsigned integer"/>
+              <Element Offset="960" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000003C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="992" Vartype="String" Bytesize="4" OffsetHex="000003E0" DisplayMethod="unsigned integer"/>
+              <Element Offset="996" Vartype="Double" Bytesize="8" RLECount="14" OffsetHex="000003E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1108" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000454" DisplayMethod="unsigned integer"/>
+              <Element Offset="1112" Vartype="Pointer" Bytesize="8" OffsetHex="00000458" DisplayMethod="unsigned integer"/>
+              <Element Offset="1120" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000460" DisplayMethod="unsigned integer"/>
+              <Element Offset="1128" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000468" DisplayMethod="unsigned integer"/>
+              <Element Offset="1132" Vartype="4 Bytes" Bytesize="4" RLECount="26" OffsetHex="0000046C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1236" Vartype="Double" Bytesize="8" RLECount="10" OffsetHex="000004D4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1316" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000524" DisplayMethod="unsigned integer"/>
+              <Element Offset="1320" Vartype="Pointer" Bytesize="8" OffsetHex="00000528" DisplayMethod="unsigned integer"/>
+              <Element Offset="1328" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000530" DisplayMethod="unsigned integer"/>
+              <Element Offset="1336" Vartype="String" Bytesize="4" OffsetHex="00000538" DisplayMethod="unsigned integer"/>
+              <Element Offset="1340" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="0000053C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1356" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000054C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1360" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000550" DisplayMethod="unsigned integer"/>
+              <Element Offset="1392" Vartype="String" Bytesize="4" OffsetHex="00000570" DisplayMethod="unsigned integer"/>
+              <Element Offset="1396" Vartype="Double" Bytesize="8" RLECount="7" OffsetHex="00000574" DisplayMethod="unsigned integer"/>
+              <Element Offset="1452" Vartype="4 Bytes" Bytesize="4" OffsetHex="000005AC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1456" Vartype="Pointer" Bytesize="8" OffsetHex="000005B0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1464" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000005B8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1472" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="000005C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1476" Vartype="4 Bytes" Bytesize="4" RLECount="26" OffsetHex="000005C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1580" Vartype="Double" Bytesize="8" RLECount="10" OffsetHex="0000062C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1660" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000067C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1664" Vartype="Pointer" Bytesize="8" OffsetHex="00000680" DisplayMethod="unsigned integer"/>
+              <Element Offset="1672" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000688" DisplayMethod="unsigned integer"/>
+              <Element Offset="1680" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000690" DisplayMethod="unsigned integer"/>
+              <Element Offset="1684" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000694" DisplayMethod="unsigned integer"/>
+              <Element Offset="1700" Vartype="4 Bytes" Bytesize="4" OffsetHex="000006A4" DisplayMethod="unsigned integer"/>
+              <Element Offset="1704" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000006A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1736" Vartype="String" Bytesize="4" OffsetHex="000006C8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1740" Vartype="Double" Bytesize="8" RLECount="7" OffsetHex="000006CC" DisplayMethod="unsigned integer"/>
+              <Element Offset="1796" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000704" DisplayMethod="unsigned integer"/>
+              <Element Offset="1800" Vartype="Pointer" Bytesize="8" OffsetHex="00000708" DisplayMethod="unsigned integer"/>
+              <Element Offset="1808" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000710" DisplayMethod="unsigned integer"/>
+              <Element Offset="1816" Vartype="String" Bytesize="4" OffsetHex="00000718" DisplayMethod="unsigned integer"/>
+              <Element Offset="1820" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="0000071C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1836" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000072C" DisplayMethod="unsigned integer"/>
+              <Element Offset="1840" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000730" DisplayMethod="unsigned integer"/>
+              <Element Offset="1872" Vartype="String" Bytesize="4" OffsetHex="00000750" DisplayMethod="unsigned integer"/>
+              <Element Offset="1876" Vartype="Double" Bytesize="8" RLECount="8" OffsetHex="00000754" DisplayMethod="unsigned integer"/>
+              <Element Offset="1940" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000794" DisplayMethod="unsigned integer"/>
+              <Element Offset="1944" Vartype="Pointer" Bytesize="8" OffsetHex="00000798" DisplayMethod="unsigned integer"/>
+              <Element Offset="1952" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="000007A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="1960" Vartype="String" Bytesize="4" OffsetHex="000007A8" DisplayMethod="unsigned integer"/>
+              <Element Offset="1964" Vartype="4 Bytes" Bytesize="4" RLECount="14" OffsetHex="000007AC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2020" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="000007E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2052" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000804" DisplayMethod="unsigned integer"/>
+              <Element Offset="2056" Vartype="Pointer" Bytesize="8" OffsetHex="00000808" DisplayMethod="unsigned integer"/>
+              <Element Offset="2064" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000810" DisplayMethod="unsigned integer"/>
+              <Element Offset="2072" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000818" DisplayMethod="unsigned integer"/>
+              <Element Offset="2076" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="0000081C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2092" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000082C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2096" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000830" DisplayMethod="unsigned integer"/>
+              <Element Offset="2128" Vartype="String" Bytesize="4" OffsetHex="00000850" DisplayMethod="unsigned integer"/>
+              <Element Offset="2132" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000854" DisplayMethod="unsigned integer"/>
+              <Element Offset="2164" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000874" DisplayMethod="unsigned integer"/>
+              <Element Offset="2168" Vartype="Pointer" Bytesize="8" OffsetHex="00000878" DisplayMethod="unsigned integer"/>
+              <Element Offset="2176" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000880" DisplayMethod="unsigned integer"/>
+              <Element Offset="2184" Vartype="String" Bytesize="4" OffsetHex="00000888" DisplayMethod="unsigned integer"/>
+              <Element Offset="2188" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="0000088C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2204" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000089C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2208" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="000008A0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2240" Vartype="String" Bytesize="4" OffsetHex="000008C0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2244" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="000008C4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2276" Vartype="4 Bytes" Bytesize="4" OffsetHex="000008E4" DisplayMethod="unsigned integer"/>
+              <Element Offset="2280" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="000008E8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2360" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000938" DisplayMethod="unsigned integer"/>
+              <Element Offset="2368" Vartype="String" Bytesize="4" OffsetHex="00000940" DisplayMethod="unsigned integer"/>
+              <Element Offset="2372" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000944" DisplayMethod="unsigned integer"/>
+              <Element Offset="2388" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000954" DisplayMethod="unsigned integer"/>
+              <Element Offset="2392" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000958" DisplayMethod="unsigned integer"/>
+              <Element Offset="2424" Vartype="String" Bytesize="4" OffsetHex="00000978" DisplayMethod="unsigned integer"/>
+              <Element Offset="2428" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="0000097C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2716" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000A9C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2720" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000AA0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2800" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000AF0" DisplayMethod="unsigned integer"/>
+              <Element Offset="2808" Vartype="String" Bytesize="4" OffsetHex="00000AF8" DisplayMethod="unsigned integer"/>
+              <Element Offset="2812" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000AFC" DisplayMethod="unsigned integer"/>
+              <Element Offset="2828" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000B0C" DisplayMethod="unsigned integer"/>
+              <Element Offset="2832" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000B10" DisplayMethod="unsigned integer"/>
+              <Element Offset="2864" Vartype="String" Bytesize="4" OffsetHex="00000B30" DisplayMethod="unsigned integer"/>
+              <Element Offset="2868" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="00000B34" DisplayMethod="unsigned integer"/>
+              <Element Offset="3156" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000C54" DisplayMethod="unsigned integer"/>
+              <Element Offset="3160" Vartype="Pointer" Bytesize="8" OffsetHex="00000C58" DisplayMethod="unsigned integer"/>
+              <Element Offset="3168" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000C60" DisplayMethod="unsigned integer"/>
+              <Element Offset="3176" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000C68" DisplayMethod="unsigned integer"/>
+              <Element Offset="3180" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000C6C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3196" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000C7C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3200" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000C80" DisplayMethod="unsigned integer"/>
+              <Element Offset="3232" Vartype="String" Bytesize="4" OffsetHex="00000CA0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3236" Vartype="Double" Bytesize="8" RLECount="8" OffsetHex="00000CA4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3300" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000CE4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3304" Vartype="Pointer" Bytesize="8" OffsetHex="00000CE8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3312" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000CF0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3320" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000CF8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3324" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000CFC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3340" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000D0C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3344" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000D10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3376" Vartype="String" Bytesize="4" OffsetHex="00000D30" DisplayMethod="unsigned integer"/>
+              <Element Offset="3380" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000D34" DisplayMethod="unsigned integer"/>
+              <Element Offset="3412" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000D54" DisplayMethod="unsigned integer"/>
+              <Element Offset="3416" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000D58" DisplayMethod="unsigned integer"/>
+              <Element Offset="3496" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000DA8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3504" Vartype="String" Bytesize="4" OffsetHex="00000DB0" DisplayMethod="unsigned integer"/>
+              <Element Offset="3508" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000DB4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3524" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000DC4" DisplayMethod="unsigned integer"/>
+              <Element Offset="3528" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000DC8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3560" Vartype="String" Bytesize="4" OffsetHex="00000DE8" DisplayMethod="unsigned integer"/>
+              <Element Offset="3564" Vartype="Double" Bytesize="8" RLECount="36" OffsetHex="00000DEC" DisplayMethod="unsigned integer"/>
+              <Element Offset="3852" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000F0C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3856" Vartype="Pointer" Bytesize="8" OffsetHex="00000F10" DisplayMethod="unsigned integer"/>
+              <Element Offset="3864" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000F18" DisplayMethod="unsigned integer"/>
+              <Element Offset="3872" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000F20" DisplayMethod="unsigned integer"/>
+              <Element Offset="3876" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000F24" DisplayMethod="unsigned integer"/>
+              <Element Offset="3892" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000F34" DisplayMethod="unsigned integer"/>
+              <Element Offset="3896" Vartype="Pointer" Bytesize="8" RLECount="4" OffsetHex="00000F38" DisplayMethod="unsigned integer"/>
+              <Element Offset="3928" Vartype="String" Bytesize="4" OffsetHex="00000F58" DisplayMethod="unsigned integer"/>
+              <Element Offset="3932" Vartype="Double" Bytesize="8" RLECount="4" OffsetHex="00000F5C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3964" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000F7C" DisplayMethod="unsigned integer"/>
+              <Element Offset="3968" Vartype="Pointer" Bytesize="8" RLECount="10" OffsetHex="00000F80" DisplayMethod="unsigned integer"/>
+              <Element Offset="4048" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000FD0" DisplayMethod="unsigned integer"/>
+              <Element Offset="4056" Vartype="Byte" Bytesize="1" RLECount="4" OffsetHex="00000FD8" DisplayMethod="unsigned integer"/>
+              <Element Offset="4060" Vartype="Double" Bytesize="8" RLECount="2" OffsetHex="00000FDC" DisplayMethod="unsigned integer"/>
+              <Element Offset="4076" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000FEC" DisplayMethod="unsigned integer"/>
+              <Element Offset="4080" Vartype="Pointer" Bytesize="8" RLECount="2" OffsetHex="00000FF0" DisplayMethod="unsigned integer"/>
+            </Elements>
+          </Structure>
+        </Element>
+        <Element Offset="56" Vartype="4 Bytes" Bytesize="4" OffsetHex="00000038" DisplayMethod="unsigned integer"/>
+        <Element Offset="60" Vartype="4 Bytes" Bytesize="4" OffsetHex="0000003C" DisplayMethod="hexadecimal"/>
+        <Element Offset="64" Vartype="Pointer" Bytesize="8" RLECount="2" OffsetHex="00000040" DisplayMethod="unsigned integer"/>
+        <Element Offset="77" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="0000004D" DisplayMethod="unsigned integer"/>
+        <Element Offset="80" Vartype="Pointer" Bytesize="8" OffsetHex="00000050" DisplayMethod="unsigned integer"/>
+        <Element Offset="85" Vartype="Byte" Bytesize="1" RLECount="3" OffsetHex="00000055" DisplayMethod="unsigned integer"/>
+        <Element Offset="88" Vartype="4 Bytes" Bytesize="4" RLECount="2" OffsetHex="00000058" DisplayMethod="unsigned integer"/>
+      </Elements>
+    </Structure>
+  </Structures>
+  <DisassemblerComments>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+12D1007</Address>
+      <Comment>player stamina
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+12D100D</Address>
+      <Comment>player max stamina
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C42C6</Address>
+      <Comment>item id into esi
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C42CE</Address>
+      <Comment>item base into r14
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C42E1</Address>
+      <Comment>get item id virtual function
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C42E7</Address>
+      <Comment>count into edi?
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C4301</Address>
+      <Comment>item id into r8
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+17C4324</Address>
+      <Comment>item id into r8
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+1AC7270</Address>
+      <Comment>item id into edx
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+1C6859E</Address>
+      <Comment>if amount &gt; 0
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+1D4D6D7</Address>
+      <Comment>read zenny
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+22BF618</Address>
+      <Comment>add zenny function
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+26346E5</Address>
+      <Comment>item vtable function here?
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+319FEB0</Address>
+      <Comment>item id already in rsi
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+319FF56</Address>
+      <Comment>get item count virtual function
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+319FF58</Address>
+      <Comment>compare current stack to max stack size
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+319FF6D</Address>
+      <Comment>add items
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+319FF83</Address>
+      <Comment>item id into rsi
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+31C9F42</Address>
+      <Comment>rdi set here?
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+31C9F61</Address>
+      <Comment>get item id?
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+31C9FBC</Address>
+      <Comment>get quantity
+</Comment>
+    </DisassemblerComment>
+  </DisassemblerComments>
+</CheatTable>
