@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1337095152</ID>
-      <Description>"update july 5 2022"</Description>
+      <Description>"updated july 5 2022"</Description>
       <GroupHeader>1</GroupHeader>
     </CheatEntry>
     <CheatEntry>
@@ -70,7 +70,19 @@
           </Offsets>
           <CheatEntries>
             <CheatEntry>
-              <ID>1337095159</ID>
+              <ID>1337095162</ID>
+              <Description>"+0x18 (array size?)"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>18</Offset>
+                <Offset>18</Offset>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095163</ID>
               <Description>"Base"</Description>
               <ShowAsHex>1</ShowAsHex>
               <ShowAsSigned>0</ShowAsSigned>
@@ -85,12 +97,29 @@
             </CheatEntry>
             <CheatEntry>
               <ID>1337095160</ID>
+              <Description>"Slot 1 Base"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>20</Offset>
+                <Offset>10</Offset>
+                <Offset>18</Offset>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095232</ID>
               <Description>"Slot 1 Quantity"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>MonsterHunterRise.exe+0E96B1C0</Address>
               <Offsets>
-                <Offset>64</Offset>
+                <Offset>44</Offset>
+                <Offset>20</Offset>
+                <Offset>10</Offset>
                 <Offset>18</Offset>
                 <Offset>80</Offset>
               </Offsets>
@@ -103,7 +132,9 @@
               <VariableType>4 Bytes</VariableType>
               <Address>MonsterHunterRise.exe+0E96B1C0</Address>
               <Offsets>
-                <Offset>60</Offset>
+                <Offset>40</Offset>
+                <Offset>20</Offset>
+                <Offset>10</Offset>
                 <Offset>18</Offset>
                 <Offset>80</Offset>
               </Offsets>
@@ -1043,6 +1074,132 @@ MonsterHunterRise.exe+2634699: E8 72 46 4C 01           - call MonsterHunterRise
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
+      <ID>1337095168</ID>
+      <Description>"Add Items To Item Box"</Description>
+      <Options moHideChildren="1"/>
+      <Color>C08000</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>// author: cndofx
+// calls the game's "add item" function with a custom ID and quantity
+// this function is normally called when buying items (and more?)
+
+[ENABLE]
+aobscanmodule(AddItems_Call,MonsterHunterRise.exe,4D 85 C0 0F 84 4F 01 00 00 48)
+aobscanmodule(GetItem_Call,MonsterHunterRise.exe,48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 54 41 55 41 56 41 57 48 83 EC 20 48 8B 42 18 33 DB 33 FF 45 8B E0 4C 8B EA 48 8B E9 4C 63 78 18)
+aobscanmodule(GetFreeSpot_Call,MonsterHunterRise.exe,48 89 6C 24 20 41 56 48 83 EC 20 41 81)
+alloc(AddItems,$1000,MonsterHunterRise.exe)
+registersymbol(AddItems)
+
+label(AddItemsAmount)
+label(AddItemsID)
+registersymbol(AddItemsAmount)
+registersymbol(AddItemsID)
+
+label(testval1)
+registersymbol(testval1)
+
+AddItems:
+  sub rsp,48
+  mov rcx,[MonsterHunterRise.exe+0E956940] // mystery value, check the "Add Zenny" script
+  mov rcx,[rcx+108]
+  mov rcx,[rcx+418]
+  mov rdx,[MonsterHunterRise.exe+0E96B1C0] // zenny/items struct base
+  mov rdx,[rdx+80]
+  mov r8d,[AddItemsID]
+  call GetItem_Call // get pointer to the item stack with he given ID in storage, returns in RAX
+
+  cmp rax,0
+  jne @f
+  mov rcx,[MonsterHunterRise.exe+0E956940] // mystery value, check the "Add Zenny" script
+  mov rcx,[rcx+108]
+  mov rcx,[rcx+418]
+  mov rdx,[MonsterHunterRise.exe+0E96B1C0] // zenny/items struct base
+  mov rdx,[rdx+80]
+  mov r8d,[AddItemsID]
+  call GetFreeSpot_Call // get pointer to the item stack with he given ID in storage, returns in RAX
+
+  @@:
+  mov [testval1],rax // "Item Address" displayed to user
+  mov rcx,[MonsterHunterRise.exe+0E956940] // mystery value, check the "Add Zenny" script
+  mov rcx,[rcx+108]
+  mov rcx,[rcx+418]
+  mov rdx,[MonsterHunterRise.exe+0E96B1C0] // zenny/items struct base
+  mov rdx,[rdx+80]
+  mov r8,rax                               // pointer to the item in the storage array
+  mov r9d,[AddItemsID]                     // item ID to add
+  mov ebx,[AddItemsAmount]
+  mov [rsp+20],ebx                         // item quantity to add
+  call AddItems_Call
+  add rsp,48
+  ret
+
+align 4 CC
+AddItemsAmount:
+  dd #1
+AddItemsID:
+  dd 04100006
+testval1:
+  dq 0
+ 
+[DISABLE]
+
+dealloc(*)
+unregistersymbol(*)
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337095234</ID>
+          <Description>"https://github.com/mhvuze/MonsterHunterRiseModding/wiki/Item-IDs"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+
+[ENABLE]
+shellExecute("https://github.com/mhvuze/MonsterHunterRiseModding/wiki/Item-IDs")
+
+[DISABLE]
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095230</ID>
+          <Description>"ID"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>AddItemsID</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095169</ID>
+          <Description>"Amount"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>AddItemsAmount</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095170</ID>
+          <Description>"&gt; Add"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+createthread(AddItems)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095231</ID>
+          <Description>"Item Address"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <Color>808080</Color>
+          <VariableType>8 Bytes</VariableType>
+          <Address>testval1</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
       <ID>20</ID>
       <Description>"Amor Spheres"</Description>
       <Options moHideChildren="1"/>
@@ -1803,6 +1960,50 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
                     <Offset>18</Offset>
                     <Offset>80</Offset>
                   </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095164</ID>
+                      <Description>"[[[val]+0x80]+0x18]+0x18 (item array size?)"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>18</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095165</ID>
+                      <Description>"[[[val]+0x80]+0x18]+0x10 (array of item pointers)"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>18</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>1337095167</ID>
+                          <Description>"[[[[val]+0x80]+0x18]+0x10]+0x20 (first pointer in array)"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
@@ -2758,14 +2959,21 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
+        <CheatEntry>
+          <ID>1337095153</ID>
+          <Description>"potions"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>25AB54D4</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095235</ID>
+          <Description>"No description"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>00000000266DB1B0</Address>
+        </CheatEntry>
       </CheatEntries>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095153</ID>
-      <Description>"potions"</Description>
-      <ShowAsSigned>0</ShowAsSigned>
-      <VariableType>4 Bytes</VariableType>
-      <Address>25AB54D4</Address>
     </CheatEntry>
   </CheatEntries>
   <CheatCodes>
@@ -2834,29 +3042,6 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
         <Byte>C0</Byte>
         <Byte>0F</Byte>
         <Byte>84</Byte>
-      </After>
-    </CodeEntry>
-    <CodeEntry>
-      <Description>AddItemsWrapper :test r8,r8</Description>
-      <AddressString>MonsterHunterRise.exe+17C42B0</AddressString>
-      <Before>
-        <Byte>FF</Byte>
-        <Byte>FF</Byte>
-        <Byte>C3</Byte>
-        <Byte>CC</Byte>
-        <Byte>CC</Byte>
-      </Before>
-      <Actual>
-        <Byte>4D</Byte>
-        <Byte>85</Byte>
-        <Byte>C0</Byte>
-      </Actual>
-      <After>
-        <Byte>0F</Byte>
-        <Byte>84</Byte>
-        <Byte>4F</Byte>
-        <Byte>01</Byte>
-        <Byte>00</Byte>
       </After>
     </CodeEntry>
     <CodeEntry>
@@ -2982,6 +3167,95 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
         <Byte>6C</Byte>
         <Byte>24</Byte>
         <Byte>10</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>GetItem_Call :mov [rsp+08],rbx</Description>
+      <AddressString>MonsterHunterRise.exe+172CB80</AddressString>
+      <Before>
+        <Byte>41</Byte>
+        <Byte>5C</Byte>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>5C</Byte>
+        <Byte>24</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>6C</Byte>
+        <Byte>24</Byte>
+        <Byte>10</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>GetFreeSpot_Call :mov [rsp+20],rbp</Description>
+      <AddressString>MonsterHunterRise.exe+172C8F0</AddressString>
+      <Before>
+        <Byte>C4</Byte>
+        <Byte>20</Byte>
+        <Byte>5F</Byte>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>6C</Byte>
+        <Byte>24</Byte>
+        <Byte>20</Byte>
+      </Actual>
+      <After>
+        <Byte>41</Byte>
+        <Byte>56</Byte>
+        <Byte>48</Byte>
+        <Byte>83</Byte>
+        <Byte>EC</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>AddItems_Call :test r8,r8</Description>
+      <AddressString>MonsterHunterRise.exe+17C42B0</AddressString>
+      <Before>
+        <Byte>FF</Byte>
+        <Byte>FF</Byte>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>4D</Byte>
+        <Byte>85</Byte>
+        <Byte>C0</Byte>
+      </Actual>
+      <After>
+        <Byte>0F</Byte>
+        <Byte>84</Byte>
+        <Byte>4F</Byte>
+        <Byte>01</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of jmp AddItems</Description>
+      <AddressString>13FFF0000</AddressString>
+      <Before/>
+      <Actual>
+        <Byte>EB</Byte>
+        <Byte>FE</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>83</Byte>
+        <Byte>EC</Byte>
+        <Byte>48</Byte>
+        <Byte>48</Byte>
       </After>
     </CodeEntry>
   </CheatCodes>
@@ -3597,6 +3871,16 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
     <DisassemblerComment>
       <Address>"MonsterHunterRise.exe"+12D100D</Address>
       <Comment>player max stamina
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+172CB9C</Address>
+      <Comment>move storage box pointer into rax
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+172CBC4</Address>
+      <Comment>compare current to array size
 </Comment>
     </DisassemblerComment>
     <DisassemblerComment>
