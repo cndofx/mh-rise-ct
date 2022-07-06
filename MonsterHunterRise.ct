@@ -57,6 +57,59 @@
             <Offset>60</Offset>
           </Offsets>
         </CheatEntry>
+        <CheatEntry>
+          <ID>1337095158</ID>
+          <Description>"Storage Box Pointer"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+          <Offsets>
+            <Offset>18</Offset>
+            <Offset>80</Offset>
+          </Offsets>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095159</ID>
+              <Description>"Base"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>0</Offset>
+                <Offset>18</Offset>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095160</ID>
+              <Description>"Slot 1 Quantity"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>64</Offset>
+                <Offset>18</Offset>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095161</ID>
+              <Description>"Slot 1 ID"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>60</Offset>
+                <Offset>18</Offset>
+                <Offset>80</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
@@ -129,6 +182,7 @@ createthread(AddZenny)
             <CheatEntry>
               <ID>1337095100</ID>
               <Description>"Get player something? (sell item to populate)"</Description>
+              <Options moHideChildren="1"/>
               <VariableType>Auto Assembler Script</VariableType>
               <AssemblerScript>[ENABLE]
 
@@ -1690,6 +1744,20 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
               <Offsets>
                 <Offset>10</Offset>
               </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095154</ID>
+                  <Description>"[[val]+0x10]"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>10</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
             </CheatEntry>
             <CheatEntry>
               <ID>1337095099</ID>
@@ -1701,6 +1769,42 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
               <Offsets>
                 <Offset>58</Offset>
               </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095155</ID>
+              <Description>"[val]+0x60 (points base)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>60</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095156</ID>
+              <Description>"[val]+0x80"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+              <Offsets>
+                <Offset>80</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095157</ID>
+                  <Description>"[[val]+0x80]+0x18 (storage box array?)"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>MonsterHunterRise.exe+0E96B1C0</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>80</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
@@ -2656,6 +2760,13 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
+    <CheatEntry>
+      <ID>1337095153</ID>
+      <Description>"potions"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>25AB54D4</Address>
+    </CheatEntry>
   </CheatEntries>
   <CheatCodes>
     <CodeEntry>
@@ -2846,6 +2957,31 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
         <Byte>D2</Byte>
         <Byte>4C</Byte>
         <Byte>8B</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>PurchaseItem :mov [rsp+08],rbx</Description>
+      <AddressString>MonsterHunterRise.exe+2203B90</AddressString>
+      <Before>
+        <Byte>83</Byte>
+        <Byte>C4</Byte>
+        <Byte>30</Byte>
+        <Byte>5F</Byte>
+        <Byte>C3</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>5C</Byte>
+        <Byte>24</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>89</Byte>
+        <Byte>6C</Byte>
+        <Byte>24</Byte>
+        <Byte>10</Byte>
       </After>
     </CodeEntry>
   </CheatCodes>
