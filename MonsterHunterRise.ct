@@ -1584,14 +1584,14 @@ MonsterHunterRise.exe+31CA142: 73 7C           - jae MonsterHunterRise.exe+31CA1
           </CheatEntries>
         </CheatEntry>
         <CheatEntry>
-          <ID>79</ID>
+          <ID>1337095237</ID>
           <Description>"Find Player"</Description>
           <Options moHideChildren="1"/>
           <Color>C08000</Color>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
 
-aobscanmodule(inject_getplayer,MonsterHunterRise.exe,48 8B 92 20 01 00 00 41 BE) // should be unique
+aobscanmodule(inject_getplayer,MonsterHunterRise.exe,3B 4A 18 7D 5A) // should be unique
 alloc(newmem,$1000,inject_getplayer)
 
 label(code)
@@ -1603,7 +1603,8 @@ registersymbol(pPlayer)
 newmem:
   mov [pPlayer],rdx
 code:
-  mov rdx,[rdx+00000120]
+  cmp ecx,[rdx+18]
+  jnl MonsterHunterRise.exe+38159D2
   jmp return
 
 align 8
@@ -1612,14 +1613,13 @@ pPlayer:
 
 inject_getplayer:
   jmp newmem
-  nop 2
 return:
 registersymbol(inject_getplayer)
 
 [DISABLE]
 
 inject_getplayer:
-  db 48 8B 92 20 01 00 00
+  db 3B 4A 18 7D 5A
 
 unregistersymbol(inject_getplayer)
 dealloc(newmem)
@@ -1627,153 +1627,112 @@ dealloc(newmem)
 unregistersymbol(*)
 
 {
-// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39D7E81
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+3815973
 
-MonsterHunterRise.exe+39D7E53: 0F B6 C0              - movzx eax,al
-MonsterHunterRise.exe+39D7E56: 85 C0                 - test eax,eax
-MonsterHunterRise.exe+39D7E58: 0F 84 21 03 00 00     - je MonsterHunterRise.exe+39D817F
-MonsterHunterRise.exe+39D7E5E: 48 89 6C 24 60        - mov [rsp+60],rbp
-MonsterHunterRise.exe+39D7E63: 48 89 74 24 68        - mov [rsp+68],rsi
-MonsterHunterRise.exe+39D7E68: 4C 89 64 24 70        - mov [rsp+70],r12
-MonsterHunterRise.exe+39D7E6D: 4C 89 6C 24 40        - mov [rsp+40],r13
-MonsterHunterRise.exe+39D7E72: 4C 89 74 24 38        - mov [rsp+38],r14
-MonsterHunterRise.exe+39D7E77: 4C 89 7C 24 30        - mov [rsp+30],r15
-MonsterHunterRise.exe+39D7E7C: 0F 29 74 24 20        - movaps [rsp+20],xmm6
+MonsterHunterRise.exe+3815944: 0F 84 01 01 00 00     - je MonsterHunterRise.exe+3815A4B
+MonsterHunterRise.exe+381594A: 48 8B 8B 20 01 00 00  - mov rcx,[rbx+00000120]
+MonsterHunterRise.exe+3815951: 48 8B 51 10           - mov rdx,[rcx+10]
+MonsterHunterRise.exe+3815955: 48 8B CF              - mov rcx,rdi
+MonsterHunterRise.exe+3815958: E8 D3 7E 15 FF        - call MonsterHunterRise.exe+296D830
+MonsterHunterRise.exe+381595D: 48 8B 93 20 01 00 00  - mov rdx,[rbx+00000120]
+MonsterHunterRise.exe+3815964: 0F 57 C9              - xorps xmm1,xmm1
+MonsterHunterRise.exe+3815967: F3 0F 5A C8           - cvtss2sd xmm1,xmm0
+MonsterHunterRise.exe+381596B: 66 0F 5A C9           - cvtpd2ps xmm1,xmm1
+MonsterHunterRise.exe+381596F: F3 0F 2C C9           - cvttss2si ecx,xmm1
 // ---------- INJECTING HERE ----------
-MonsterHunterRise.exe+39D7E81: 48 8B 92 20 01 00 00  - mov rdx,[rdx+00000120]
+MonsterHunterRise.exe+3815973: 3B 4A 18              - cmp ecx,[rdx+18]
 // ---------- DONE INJECTING  ----------
-MonsterHunterRise.exe+39D7E88: 41 BE 01 00 00 00     - mov r14d,00000001
-MonsterHunterRise.exe+39D7E8E: 41 8B F6              - mov esi,r14d
-MonsterHunterRise.exe+39D7E91: 45 32 FF              - xor r15l,r15l
-MonsterHunterRise.exe+39D7E94: 8B 6A 24              - mov ebp,[rdx+24]
-MonsterHunterRise.exe+39D7E97: 48 8B 52 10           - mov rdx,[rdx+10]
-MonsterHunterRise.exe+39D7E9B: E8 90 59 F9 FE        - call MonsterHunterRise.exe+296D830
-MonsterHunterRise.exe+39D7EA0: 48 8B 93 28 01 00 00  - mov rdx,[rbx+00000128]
-MonsterHunterRise.exe+39D7EA7: 45 8D 4E 02           - lea r9d,[r14+02]
-MonsterHunterRise.exe+39D7EAB: F3 0F 2C C0           - cvttss2si eax,xmm0
-MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
+MonsterHunterRise.exe+3815976: 7D 5A                 - jnl MonsterHunterRise.exe+38159D2
+MonsterHunterRise.exe+3815978: 0F B6 83 E0 00 00 00  - movzx eax,byte ptr [rbx+000000E0]
+MonsterHunterRise.exe+381597F: 2C 04                 - sub al,04
+MonsterHunterRise.exe+3815981: 3C 03                 - cmp al,03
+MonsterHunterRise.exe+3815983: 0F 87 C2 00 00 00     - ja MonsterHunterRise.exe+3815A4B
+MonsterHunterRise.exe+3815989: 48 8B 8B D0 02 00 00  - mov rcx,[rbx+000002D0]
+MonsterHunterRise.exe+3815990: 48 85 C9              - test rcx,rcx
+MonsterHunterRise.exe+3815993: 74 0B                 - je MonsterHunterRise.exe+38159A0
+MonsterHunterRise.exe+3815995: 48 83 79 10 00        - cmp qword ptr [rcx+10],00
+MonsterHunterRise.exe+381599A: 74 04                 - je MonsterHunterRise.exe+38159A0
 }
 </AssemblerScript>
           <CheatEntries>
             <CheatEntry>
-              <ID>103</ID>
+              <ID>1337095238</ID>
               <Description>"Max Health"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>18</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>85</ID>
+              <ID>1337095239</ID>
               <Description>"Health?"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>1C</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>84</ID>
+              <ID>1337095240</ID>
               <Description>"Red Health"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>24</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>81</ID>
+              <ID>1337095241</ID>
               <Description>"Stamina"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Float</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>28</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>82</ID>
+              <ID>1337095242</ID>
               <Description>"Max Stamina"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Float</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>2C</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>83</ID>
+              <ID>1337095243</ID>
               <Description>"Hunger Timer"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Float</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>30</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>128</ID>
+              <ID>1337095244</ID>
               <Description>"Attack"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Float</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>44</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
             <CheatEntry>
-              <ID>129</ID>
+              <ID>1337095245</ID>
               <Description>"Defense"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Float</VariableType>
               <Address>pPlayer</Address>
               <Offsets>
                 <Offset>58</Offset>
-                <Offset>120</Offset>
-              </Offsets>
-            </CheatEntry>
-            <CheatEntry>
-              <ID>112</ID>
-              <Description>"===================="</Description>
-              <Color>808080</Color>
-              <GroupHeader>1</GroupHeader>
-            </CheatEntry>
-            <CheatEntry>
-              <ID>80</ID>
-              <Description>"Outer Base"</Description>
-              <ShowAsHex>1</ShowAsHex>
-              <ShowAsSigned>0</ShowAsSigned>
-              <Color>808080</Color>
-              <VariableType>Array of byte</VariableType>
-              <ByteLength>0</ByteLength>
-              <Address>pPlayer</Address>
-              <Offsets>
-                <Offset>0</Offset>
-              </Offsets>
-            </CheatEntry>
-            <CheatEntry>
-              <ID>104</ID>
-              <Description>"Inner Base"</Description>
-              <ShowAsHex>1</ShowAsHex>
-              <ShowAsSigned>0</ShowAsSigned>
-              <Color>808080</Color>
-              <VariableType>Array of byte</VariableType>
-              <ByteLength>0</ByteLength>
-              <Address>pPlayer</Address>
-              <Offsets>
-                <Offset>0</Offset>
-                <Offset>120</Offset>
               </Offsets>
             </CheatEntry>
           </CheatEntries>
@@ -3097,6 +3056,201 @@ MonsterHunterRise.exe+22FEF21: 48 8B C8              - mov rcx,rax
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
               <Address>00000000266DB1B0</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>79</ID>
+              <Description>"Find Player"</Description>
+              <Options moHideChildren="1"/>
+              <Color>C08000</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_getplayer,MonsterHunterRise.exe,48 8B 92 20 01 00 00 41 BE) // should be unique
+alloc(newmem,$1000,inject_getplayer)
+
+label(code)
+label(return)
+
+label(pPlayer)
+registersymbol(pPlayer)
+
+newmem:
+  mov [pPlayer],rdx
+code:
+  mov rdx,[rdx+00000120]
+  jmp return
+
+align 8
+pPlayer:
+  dq 0
+
+inject_getplayer:
+  jmp newmem
+  nop 2
+return:
+registersymbol(inject_getplayer)
+
+[DISABLE]
+
+inject_getplayer:
+  db 48 8B 92 20 01 00 00
+
+unregistersymbol(inject_getplayer)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39D7E81
+
+MonsterHunterRise.exe+39D7E53: 0F B6 C0              - movzx eax,al
+MonsterHunterRise.exe+39D7E56: 85 C0                 - test eax,eax
+MonsterHunterRise.exe+39D7E58: 0F 84 21 03 00 00     - je MonsterHunterRise.exe+39D817F
+MonsterHunterRise.exe+39D7E5E: 48 89 6C 24 60        - mov [rsp+60],rbp
+MonsterHunterRise.exe+39D7E63: 48 89 74 24 68        - mov [rsp+68],rsi
+MonsterHunterRise.exe+39D7E68: 4C 89 64 24 70        - mov [rsp+70],r12
+MonsterHunterRise.exe+39D7E6D: 4C 89 6C 24 40        - mov [rsp+40],r13
+MonsterHunterRise.exe+39D7E72: 4C 89 74 24 38        - mov [rsp+38],r14
+MonsterHunterRise.exe+39D7E77: 4C 89 7C 24 30        - mov [rsp+30],r15
+MonsterHunterRise.exe+39D7E7C: 0F 29 74 24 20        - movaps [rsp+20],xmm6
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+39D7E81: 48 8B 92 20 01 00 00  - mov rdx,[rdx+00000120]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+39D7E88: 41 BE 01 00 00 00     - mov r14d,00000001
+MonsterHunterRise.exe+39D7E8E: 41 8B F6              - mov esi,r14d
+MonsterHunterRise.exe+39D7E91: 45 32 FF              - xor r15l,r15l
+MonsterHunterRise.exe+39D7E94: 8B 6A 24              - mov ebp,[rdx+24]
+MonsterHunterRise.exe+39D7E97: 48 8B 52 10           - mov rdx,[rdx+10]
+MonsterHunterRise.exe+39D7E9B: E8 90 59 F9 FE        - call MonsterHunterRise.exe+296D830
+MonsterHunterRise.exe+39D7EA0: 48 8B 93 28 01 00 00  - mov rdx,[rbx+00000128]
+MonsterHunterRise.exe+39D7EA7: 45 8D 4E 02           - lea r9d,[r14+02]
+MonsterHunterRise.exe+39D7EAB: F3 0F 2C C0           - cvttss2si eax,xmm0
+MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>103</ID>
+                  <Description>"Max Health"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>18</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>85</ID>
+                  <Description>"Health?"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>84</ID>
+                  <Description>"Red Health"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>24</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>81</ID>
+                  <Description>"Stamina"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>28</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>82</ID>
+                  <Description>"Max Stamina"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>2C</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>83</ID>
+                  <Description>"Hunger Timer"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>30</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>128</ID>
+                  <Description>"Attack"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>44</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>129</ID>
+                  <Description>"Defense"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Float</VariableType>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>58</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>112</ID>
+                  <Description>"===================="</Description>
+                  <Color>808080</Color>
+                  <GroupHeader>1</GroupHeader>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>80</ID>
+                  <Description>"Outer Base"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>808080</Color>
+                  <VariableType>Array of byte</VariableType>
+                  <ByteLength>0</ByteLength>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>104</ID>
+                  <Description>"Inner Base"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <Color>808080</Color>
+                  <VariableType>Array of byte</VariableType>
+                  <ByteLength>0</ByteLength>
+                  <Address>pPlayer</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>120</Offset>
+                  </Offsets>
+                </CheatEntry>
+              </CheatEntries>
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
