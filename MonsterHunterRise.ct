@@ -119,6 +119,31 @@ end
 require("ce.view_mode")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+{$asm}
+aobscanmodule(aob_storageaddress,MonsterHunterRise.exe,48 8B 15 ?? ?? ?? ?? 48 89 5C 24 ?? 48 89 7C 24 ?? 48 85 D2 74 0B)
+
+label(StorageStatic)
+registersymbol(StorageStatic)
+
+aob_storageaddress+7+(DWORD)[aob_storageaddress+3]:
+StorageStatic:
+
+{$lua}
+
+
+
 synchronize(function()
     local al = getAddressList()
     local mr = al.getMemoryRecordByDescription("get unknown base for add zenny/items script")
@@ -129,6 +154,20 @@ synchronize(function()
 end)
 
 [DISABLE]
+
+synchronize(function()
+    local al = getAddressList()
+    local mr = al.getMemoryRecordByDescription("get unknown base for add zenny/items script")
+    mr.Active = false
+    local mr = al.getMemoryRecordByDescription("get zenny structure base")
+    mr.Active = false
+
+end)
+
+{$asm}
+unregistersymbol(*)
+
+{$lua}
 </AssemblerScript>
       <CheatEntries>
         <CheatEntry>
@@ -144,7 +183,7 @@ end)
               <ShowAsHex>1</ShowAsHex>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>58</Offset>
               </Offsets>
@@ -154,7 +193,7 @@ end)
               <Description>"Zenny"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>18</Offset>
                 <Offset>58</Offset>
@@ -165,7 +204,7 @@ end)
               <Description>"Total Zenny Earned"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>1C</Offset>
                 <Offset>58</Offset>
@@ -176,7 +215,7 @@ end)
               <Description>"Points"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>10</Offset>
                 <Offset>60</Offset>
@@ -187,7 +226,7 @@ end)
               <Description>"Total Points Earned"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>14</Offset>
                 <Offset>60</Offset>
@@ -201,7 +240,7 @@ end)
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>Array of byte</VariableType>
               <ByteLength>0</ByteLength>
-              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Address>StorageStatic</Address>
               <Offsets>
                 <Offset>18</Offset>
                 <Offset>80</Offset>
@@ -212,7 +251,7 @@ end)
                   <Description>"+0x18 (array size?)"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
-                  <Address>MonsterHunterRise.exe+0E96B280</Address>
+                  <Address>StorageStatic</Address>
                   <Offsets>
                     <Offset>18</Offset>
                     <Offset>18</Offset>
@@ -226,7 +265,7 @@ end)
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Array of byte</VariableType>
                   <ByteLength>0</ByteLength>
-                  <Address>MonsterHunterRise.exe+0E96B280</Address>
+                  <Address>StorageStatic</Address>
                   <Offsets>
                     <Offset>0</Offset>
                     <Offset>18</Offset>
@@ -239,7 +278,7 @@ end)
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>Array of byte</VariableType>
                   <ByteLength>0</ByteLength>
-                  <Address>MonsterHunterRise.exe+0E96B280</Address>
+                  <Address>StorageStatic</Address>
                   <Offsets>
                     <Offset>0</Offset>
                     <Offset>20</Offset>
@@ -253,7 +292,7 @@ end)
                   <Description>"Slot 1 Quantity"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
-                  <Address>MonsterHunterRise.exe+0E96B280</Address>
+                  <Address>StorageStatic</Address>
                   <Offsets>
                     <Offset>44</Offset>
                     <Offset>20</Offset>
@@ -268,7 +307,7 @@ end)
                   <ShowAsHex>1</ShowAsHex>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
-                  <Address>MonsterHunterRise.exe+0E96B280</Address>
+                  <Address>StorageStatic</Address>
                   <Offsets>
                     <Offset>40</Offset>
                     <Offset>20</Offset>
@@ -276,6 +315,70 @@ end)
                     <Offset>18</Offset>
                     <Offset>80</Offset>
                   </Offsets>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095284</ID>
+              <Description>"Equipment Box Pointer"</Description>
+              <Options moHideChildren="1"/>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
+              <Address>StorageStatic</Address>
+              <Offsets>
+                <Offset>10</Offset>
+                <Offset>98</Offset>
+                <Offset>88</Offset>
+              </Offsets>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095308</ID>
+                  <Description>"Base"</Description>
+                  <Options moHideChildren="1"/>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>Array of byte</VariableType>
+                  <ByteLength>0</ByteLength>
+                  <Address>StorageStatic</Address>
+                  <Offsets>
+                    <Offset>0</Offset>
+                    <Offset>10</Offset>
+                    <Offset>98</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095309</ID>
+                  <Description>"Size"</Description>
+                  <Options moHideChildren="1"/>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>StorageStatic</Address>
+                  <Offsets>
+                    <Offset>1C</Offset>
+                    <Offset>10</Offset>
+                    <Offset>98</Offset>
+                    <Offset>88</Offset>
+                  </Offsets>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095310</ID>
+                      <Description>"Equipment Box Pointer"</Description>
+                      <Options moHideChildren="1"/>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Array of byte</VariableType>
+                      <ByteLength>0</ByteLength>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>98</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
@@ -3771,11 +3874,568 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
                     </CheatEntry>
                   </CheatEntries>
                 </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095311</ID>
+                  <Description>"Pointers (old)"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>C08000</Color>
+                  <GroupHeader>1</GroupHeader>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095312</ID>
+                      <Description>"Zenny Struct Base"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095313</ID>
+                      <Description>"Zenny"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095314</ID>
+                      <Description>"Total Zenny Earned"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>1C</Offset>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095315</ID>
+                      <Description>"Points"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095316</ID>
+                      <Description>"Total Points Earned"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095317</ID>
+                      <Description>"Storage Box Pointer"</Description>
+                      <Options moHideChildren="1"/>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Array of byte</VariableType>
+                      <ByteLength>0</ByteLength>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>18</Offset>
+                        <Offset>80</Offset>
+                      </Offsets>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>1337095318</ID>
+                          <Description>"+0x18 (array size?)"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>18</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095319</ID>
+                          <Description>"Base"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Array of byte</VariableType>
+                          <ByteLength>0</ByteLength>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>0</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095320</ID>
+                          <Description>"Slot 1 Base"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Array of byte</VariableType>
+                          <ByteLength>0</ByteLength>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>0</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095321</ID>
+                          <Description>"Slot 1 Quantity"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>44</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095322</ID>
+                          <Description>"Slot 1 ID"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>40</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>18</Offset>
+                            <Offset>80</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095323</ID>
+                      <Description>"Equipment Box Pointer"</Description>
+                      <Options moHideChildren="1"/>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Array of byte</VariableType>
+                      <ByteLength>0</ByteLength>
+                      <Address>MonsterHunterRise.exe+0E96B280</Address>
+                      <Offsets>
+                        <Offset>10</Offset>
+                        <Offset>98</Offset>
+                        <Offset>88</Offset>
+                      </Offsets>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>1337095324</ID>
+                          <Description>"Base"</Description>
+                          <Options moHideChildren="1"/>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>Array of byte</VariableType>
+                          <ByteLength>0</ByteLength>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>0</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                            <Offset>88</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095325</ID>
+                          <Description>"Size"</Description>
+                          <Options moHideChildren="1"/>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>MonsterHunterRise.exe+0E96B280</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                            <Offset>88</Offset>
+                          </Offsets>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>1337095326</ID>
+                              <Description>"Equipment Box Pointer"</Description>
+                              <Options moHideChildren="1"/>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>Array of byte</VariableType>
+                              <ByteLength>0</ByteLength>
+                              <Address>MonsterHunterRise.exe+0E96B280</Address>
+                              <Offsets>
+                                <Offset>10</Offset>
+                                <Offset>98</Offset>
+                                <Offset>88</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095294</ID>
+              <Description>"temporary/testing"</Description>
+              <Color>808080</Color>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095278</ID>
+                  <Description>"find pointers"</Description>
+                  <Options moHideChildren="1"/>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+aobscanmodule(aob_monsteraddress,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 88 ?? ?? ?? ?? 4A 8B 44 C9 20)
+aobscanmodule(aob_chataddress,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8D 4C 24 ?? 48 8B D7 4C 8B 40 ?? E8 ?? ?? ?? ?? 0F 10 00)
+aobscanmodule(aob_zennyaddress,MonsterHunterRise.exe,48 8B 15 ?? ?? ?? ?? 48 89 5C 24 ?? 48 89 7C 24 ?? 48 85 D2 74 0B)
+
+label(MonsterAddress)
+registersymbol(MonsterAddress)
+label(ChatAddress)
+registersymbol(ChatAddress)
+label(ZennyAddress)
+registersymbol(ZennyAddress)
+
+// RIP + instruction size + bytes
+
+aob_monsteraddress+7+(DWORD)[aob_monsteraddress+3]:
+MonsterAddress:
+
+aob_chataddress+7+(DWORD)[aob_chataddress+3]:
+ChatAddress:
+
+aob_zennyaddress+7+(DWORD)[aob_zennyaddress+3]:
+ZennyAddress:
+
+[DISABLE]
+
+dealloc(*)
+unregistersymbol(*)
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095279</ID>
+                      <Description>"MonsterAddress"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>MonsterAddress</Address>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095282</ID>
+                      <Description>"ChatAddress"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>ChatAddress</Address>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095307</ID>
+                      <Description>"ZennyAddress"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>ZennyAddress</Address>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095288</ID>
+                  <Description>"find equipment box"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-09
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_equipmentbox,MonsterHunterRise.exe,48 3B 7C D1 20 48 8D 1C D1 74 44 48 85 FF 74 08 48 8B CF E8 CE A9) // should be unique
+alloc(newmem,$1000,inject_equipmentbox)
+
+label(code)
+label(return)
+
+label(EquipmentBox)
+registersymbol(EquipmentBox)
+
+newmem:
+  mov [EquipmentBox],rcx
+code:
+  cmp rdi,[rcx+rdx*8+20]
+  jmp return
+
+align 8 CC
+EquipmentBox:
+  dq 0
+
+inject_equipmentbox:
+  jmp newmem
+return:
+registersymbol(inject_equipmentbox)
+
+[DISABLE]
+
+inject_equipmentbox:
+  db 48 3B 7C D1 20
+
+unregistersymbol(inject_equipmentbox)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+28098EA
+
+MonsterHunterRise.exe+28098CD: 8D 42 01           - lea eax,[rdx+01]
+MonsterHunterRise.exe+28098D0: 89 43 18           - mov [rbx+18],eax
+MonsterHunterRise.exe+28098D3: 8B 41 08           - mov eax,[rcx+08]
+MonsterHunterRise.exe+28098D6: 85 C0              - test eax,eax
+MonsterHunterRise.exe+28098D8: 79 10              - jns MonsterHunterRise.exe+28098EA
+MonsterHunterRise.exe+28098DA: 48 89 7C D1 20     - mov [rcx+rdx*8+20],rdi
+MonsterHunterRise.exe+28098DF: 48 8B 5C 24 30     - mov rbx,[rsp+30]
+MonsterHunterRise.exe+28098E4: 48 83 C4 20        - add rsp,20
+MonsterHunterRise.exe+28098E8: 5F                 - pop rdi
+MonsterHunterRise.exe+28098E9: C3                 - ret 
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+28098EA: 48 3B 7C D1 20     - cmp rdi,[rcx+rdx*8+20]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+28098EF: 48 8D 1C D1        - lea rbx,[rcx+rdx*8]
+MonsterHunterRise.exe+28098F3: 74 44              - je MonsterHunterRise.exe+2809939
+MonsterHunterRise.exe+28098F5: 48 85 FF           - test rdi,rdi
+MonsterHunterRise.exe+28098F8: 74 08              - je MonsterHunterRise.exe+2809902
+MonsterHunterRise.exe+28098FA: 48 8B CF           - mov rcx,rdi
+MonsterHunterRise.exe+28098FD: E8 CE A9 31 01     - call MonsterHunterRise.exe+3B242D0
+MonsterHunterRise.exe+2809902: 48 8B 4B 20        - mov rcx,[rbx+20]
+MonsterHunterRise.exe+2809906: 48 8B C1           - mov rax,rcx
+MonsterHunterRise.exe+2809909: F0 48 0F B1 7B 20  - lock cmpxchg [rbx+20],rdi
+MonsterHunterRise.exe+280990F: 74 1E              - je MonsterHunterRise.exe+280992F
+}
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095289</ID>
+                      <Description>"EquipmentBox"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>EquipmentBox</Address>
+                      <CheatEntries>
+                        <CheatEntry>
+                          <ID>1337095290</ID>
+                          <Description>"Size"</Description>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>EquipmentBox</Address>
+                          <Offsets>
+                            <Offset>1C</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095295</ID>
+                          <Description>"First Item Pointer"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>EquipmentBox</Address>
+                          <Offsets>
+                            <Offset>20</Offset>
+                          </Offsets>
+                          <CheatEntries>
+                            <CheatEntry>
+                              <ID>1337095296</ID>
+                              <Description>"Base"</Description>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>EquipmentBox</Address>
+                              <Offsets>
+                                <Offset>0</Offset>
+                                <Offset>20</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>1337095297</ID>
+                              <Description>"Type"</Description>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>EquipmentBox</Address>
+                              <Offsets>
+                                <Offset>2C</Offset>
+                                <Offset>20</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>1337095298</ID>
+                              <Description>"Slot Pointer"</Description>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>EquipmentBox</Address>
+                              <Offsets>
+                                <Offset>70</Offset>
+                                <Offset>20</Offset>
+                              </Offsets>
+                              <CheatEntries>
+                                <CheatEntry>
+                                  <ID>1337095299</ID>
+                                  <Description>"Level 1 Slots"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>24</Offset>
+                                    <Offset>70</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                                <CheatEntry>
+                                  <ID>1337095304</ID>
+                                  <Description>"Level 2 Slots"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>28</Offset>
+                                    <Offset>70</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                                <CheatEntry>
+                                  <ID>1337095303</ID>
+                                  <Description>"Level 3 Slots"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>2C</Offset>
+                                    <Offset>70</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                              </CheatEntries>
+                            </CheatEntry>
+                            <CheatEntry>
+                              <ID>1337095300</ID>
+                              <Description>"Skills Pointer"</Description>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>EquipmentBox</Address>
+                              <Offsets>
+                                <Offset>78</Offset>
+                                <Offset>20</Offset>
+                              </Offsets>
+                              <CheatEntries>
+                                <CheatEntry>
+                                  <ID>1337095301</ID>
+                                  <Description>"Skills Value 1"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>20</Offset>
+                                    <Offset>80</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                                <CheatEntry>
+                                  <ID>1337095302</ID>
+                                  <Description>"Skills Value 2"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>24</Offset>
+                                    <Offset>80</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                              </CheatEntries>
+                            </CheatEntry>
+                          </CheatEntries>
+                        </CheatEntry>
+                        <CheatEntry>
+                          <ID>1337095291</ID>
+                          <Description>"Second Item Pointer"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>EquipmentBox</Address>
+                          <Offsets>
+                            <Offset>28</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                      </CheatEntries>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
               </CheatEntries>
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
       </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095285</ID>
+      <Description>"No description"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>23ACD924</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095286</ID>
+      <Description>"No description"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>4 Bytes</VariableType>
+      <Address>09B60E30</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095287</ID>
+      <Description>"No description"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>4 Bytes</VariableType>
+      <Address>09B6AAB0</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095305</ID>
+      <Description>"No description"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>09B6AA90</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1337095306</ID>
+      <Description>"No description"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>MonsterHunterRise.exe+0E96B280</Address>
     </CheatEntry>
   </CheatEntries>
   <CheatCodes>
@@ -4090,6 +4750,29 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
         <Byte>EC</Byte>
         <Byte>48</Byte>
         <Byte>48</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>read items while crafting :mov eax,[rax+14]</Description>
+      <AddressString>MonsterHunterRise.exe+30C454</AddressString>
+      <Before>
+        <Byte>CC</Byte>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>42</Byte>
+        <Byte>20</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>40</Byte>
+        <Byte>14</Byte>
+      </Actual>
+      <After>
+        <Byte>C3</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
       </After>
     </CodeEntry>
   </CheatCodes>
