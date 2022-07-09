@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1337095152</ID>
-      <Description>"updated july 8 2022"</Description>
+      <Description>"updated july 8 2022 - game v10.0.3.0"</Description>
       <GroupHeader>1</GroupHeader>
     </CheatEntry>
     <CheatEntry>
@@ -123,6 +123,9 @@ synchronize(function()
     local al = getAddressList()
     local mr = al.getMemoryRecordByDescription("get unknown base for add zenny/items script")
     mr.Active = true
+    local mr = al.getMemoryRecordByDescription("get zenny structure base")
+    mr.Active = true
+
 end)
 
 [DISABLE]
@@ -137,6 +140,17 @@ end)
           <CheatEntries>
             <CheatEntry>
               <ID>1337095084</ID>
+              <Description>"Zenny Struct Base"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>MonsterHunterRise.exe+0E96B280</Address>
+              <Offsets>
+                <Offset>58</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095257</ID>
               <Description>"Zenny"</Description>
               <ShowAsSigned>0</ShowAsSigned>
               <VariableType>4 Bytes</VariableType>
@@ -182,9 +196,11 @@ end)
             <CheatEntry>
               <ID>1337095158</ID>
               <Description>"Storage Box Pointer"</Description>
+              <Options moHideChildren="1"/>
               <ShowAsHex>1</ShowAsHex>
               <ShowAsSigned>0</ShowAsSigned>
-              <VariableType>4 Bytes</VariableType>
+              <VariableType>Array of byte</VariableType>
+              <ByteLength>0</ByteLength>
               <Address>MonsterHunterRise.exe+0E96B280</Address>
               <Offsets>
                 <Offset>18</Offset>
@@ -1281,6 +1297,80 @@ MonsterHunterRise.exe+2634699: E8 72 46 4C 01           - call MonsterHunterRise
           </CheatEntries>
         </CheatEntry>
         <CheatEntry>
+          <ID>1337095260</ID>
+          <Description>"Add Zenny (experimental)"</Description>
+          <Options moHideChildren="1"/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>// author: cndofx
+// calls the game's "add zenny" function with a custom value
+// this function is normally called when selling items
+
+[ENABLE]
+aobscanmodule(AddZenny_Call,MonsterHunterRise.exe,48 8D 44 24 18 4C 8B)
+alloc(AddZenny,$1000,MonsterHunterRise.exe)
+registersymbol(AddZenny)
+
+label(AddZennyAmount)
+registersymbol(AddZennyAmount)
+
+AddZenny:
+  sub rsp,48
+  mov rcx,[unkBase1]
+  mov rdx,[BaseZenny]
+  mov rdx,[rdx+58]
+  mov r8d,[AddZennyAmount]
+  call AddZenny_Call
+  add rsp,48
+  ret
+
+align 4 CC
+AddZennyAmount:
+  dd #1000
+ 
+[DISABLE]
+
+dealloc(*)
+unregistersymbol(*)
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095261</ID>
+              <Description>"Amount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>AddZennyAmount</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095262</ID>
+              <Description>"&gt; Add"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+createthread(AddZenny)
+
+{$lua}
+disableMemrec(memrec)
+{$asm}
+
+[DISABLE]
+
+
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095263</ID>
+              <Description>"experimental version that doesn't use static pointers"</Description>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095264</ID>
+              <Description>"should survive game updates, but might be buggier"</Description>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
           <ID>1337095168</ID>
           <Description>"Add Items To Item Box"</Description>
           <Options moHideChildren="1"/>
@@ -1409,6 +1499,142 @@ disableMemrec(memrec)
               <Color>808080</Color>
               <VariableType>8 Bytes</VariableType>
               <Address>testval1</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095265</ID>
+          <Description>"Add Items To Item Box (experimental)"</Description>
+          <Options moHideChildren="1"/>
+          <Color>C08000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>// author: cndofx
+// calls the game's "add item" function with a custom ID and quantity
+// this function is normally called when buying items (and more?)
+
+[ENABLE]
+aobscanmodule(AddItems_Call,MonsterHunterRise.exe,4D 85 C0 0F 84 4F 01 00 00 48)
+aobscanmodule(GetItem_Call,MonsterHunterRise.exe,48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 41 54 41 55 41 56 41 57 48 83 EC 20 48 8B 42 18 33 DB 33 FF 45 8B E0 4C 8B EA 48 8B E9 4C 63 78 18)
+aobscanmodule(GetFreeSpot_Call,MonsterHunterRise.exe,48 89 6C 24 20 41 56 48 83 EC 20 41 81)
+alloc(AddItems,$1000,MonsterHunterRise.exe)
+registersymbol(AddItems)
+
+label(AddItemsAmount)
+label(AddItemsID)
+registersymbol(AddItemsAmount)
+registersymbol(AddItemsID)
+
+label(testval1)
+registersymbol(testval1)
+
+AddItems:
+  sub rsp,48
+  mov rcx,[unkBase1]
+  mov rdx,[BaseZenny]
+  mov rdx,[rdx+80]         // base address of the storage array
+  mov r8d,[AddItemsID]
+  call GetItem_Call        // get pointer to the item stack with the given ID in storage, returns in RAX
+
+  cmp rax,0
+  jne @f
+  mov rcx,[unkBase1]
+  mov rdx,[BaseZenny]
+  mov rdx,[rdx+80]         // base address of the storage array
+  mov r8d,[AddItemsID]
+  call GetFreeSpot_Call    // get pointer to the next empty item slot, returns in RAX
+
+  @@:
+  mov [testval1],rax       // "Item Address" displayed to user
+  mov rcx,[unkBase1]
+  mov rdx,[BaseZenny]
+  mov rdx,[rdx+80]         // param1: base address of the storage array
+  mov r8,rax               // param2: pointer to the item in the storage array
+  mov r9d,[AddItemsID]     // param3: item ID to add
+  mov ebx,[AddItemsAmount]
+  mov [rsp+20],ebx         // param4: item quantity to add
+  call AddItems_Call
+  add rsp,48
+  ret
+
+align 4 CC
+AddItemsAmount:
+  dd #1
+AddItemsID:
+  dd 04100006
+testval1:
+  dq 0
+ 
+[DISABLE]
+
+dealloc(*)
+unregistersymbol(*)
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095266</ID>
+              <Description>"https://github.com/mhvuze/MonsterHunterRiseModding/wiki/Item-IDs"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{$lua}
+if syntaxcheck then return end
+
+[ENABLE]
+shellExecute("https://github.com/mhvuze/MonsterHunterRiseModding/wiki/Item-IDs")
+
+disableMemrec(memrec)
+
+[DISABLE]
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095267</ID>
+              <Description>"ID (hex)"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>AddItemsID</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095268</ID>
+              <Description>"Amount"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>AddItemsAmount</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095269</ID>
+              <Description>"&gt; Add"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+createthread(AddItems)
+
+{$lua}
+disableMemrec(memrec)
+{$asm}
+
+[DISABLE]
+
+
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095270</ID>
+              <Description>"Item Address"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <Color>808080</Color>
+              <VariableType>8 Bytes</VariableType>
+              <Address>testval1</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095274</ID>
+              <Description>"experimental version that doesn't use static pointers"</Description>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095275</ID>
+              <Description>"should survive game updates, but might be buggier"</Description>
+              <GroupHeader>1</GroupHeader>
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
@@ -1825,6 +2051,12 @@ MonsterHunterRise.exe+381599A: 74 04                 - je MonsterHunterRise.exe+
           <GroupHeader>1</GroupHeader>
           <CheatEntries>
             <CheatEntry>
+              <ID>1337095276</ID>
+              <Description>"warning: don't mess with these unless you know what you're doing"</Description>
+              <Color>400080</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+            <CheatEntry>
               <ID>1337095247</ID>
               <Description>"get unknown base for add zenny/items script"</Description>
               <VariableType>Auto Assembler Script</VariableType>
@@ -1905,6 +2137,122 @@ MonsterHunterRise.exe+3B42147: E8 44 1F 08 00           - call MonsterHunterRise
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
                   <Address>unkBase1</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095258</ID>
+              <Description>"get zenny structure base"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_getzennybase,MonsterHunterRise.exe,48 8B 42 58 EB 03 48 8B C3) // should be unique
+alloc(newmem,$1000,inject_getzennybase)
+
+label(code)
+label(return)
+
+label(BaseZenny)
+registersymbol(BaseZenny)
+
+newmem:
+  mov [BaseZenny],rdx
+code:
+  mov rax,[rdx+58]
+  jmp return+03
+  jmp return
+
+align 8 CC
+BaseZenny:
+  dq 0
+
+inject_getzennybase:
+  jmp newmem
+  nop
+return:
+registersymbol(inject_getzennybase)
+
+[DISABLE]
+
+inject_getzennybase:
+  db 48 8B 42 58 EB 03
+
+unregistersymbol(inject_getzennybase)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+22FEE0F
+
+MonsterHunterRise.exe+22FEDF7: 74 0B                 - je MonsterHunterRise.exe+22FEE04
+MonsterHunterRise.exe+22FEDF9: 48 83 7A 10 00        - cmp qword ptr [rdx+10],00
+MonsterHunterRise.exe+22FEDFE: 74 04                 - je MonsterHunterRise.exe+22FEE04
+MonsterHunterRise.exe+22FEE00: 32 C0                 - xor al,al
+MonsterHunterRise.exe+22FEE02: EB 02                 - jmp MonsterHunterRise.exe+22FEE06
+MonsterHunterRise.exe+22FEE04: B0 01                 - mov al,01
+MonsterHunterRise.exe+22FEE06: 0F B6 C0              - movzx eax,al
+MonsterHunterRise.exe+22FEE09: 33 DB                 - xor ebx,ebx
+MonsterHunterRise.exe+22FEE0B: 85 C0                 - test eax,eax
+MonsterHunterRise.exe+22FEE0D: 75 06                 - jne MonsterHunterRise.exe+22FEE15
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+22FEE0F: 48 8B 42 58           - mov rax,[rdx+58]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+22FEE13: EB 03                 - jmp MonsterHunterRise.exe+22FEE18
+MonsterHunterRise.exe+22FEE15: 48 8B C3              - mov rax,rbx
+MonsterHunterRise.exe+22FEE18: 8B 40 18              - mov eax,[rax+18]
+MonsterHunterRise.exe+22FEE1B: 48 8D 54 24 38        - lea rdx,[rsp+38]
+MonsterHunterRise.exe+22FEE20: 89 44 24 38           - mov [rsp+38],eax
+MonsterHunterRise.exe+22FEE24: 48 8B 05 A5 47 74 0C  - mov rax,[MonsterHunterRise.exe+EA435D0]
+MonsterHunterRise.exe+22FEE2B: 48 89 5C 24 40        - mov [rsp+40],rbx
+MonsterHunterRise.exe+22FEE30: 4C 8B 40 28           - mov r8,[rax+28]
+MonsterHunterRise.exe+22FEE34: E8 67 BA 88 01        - call MonsterHunterRise.exe+3B8A8A0
+MonsterHunterRise.exe+22FEE39: 48 8B F8              - mov rdi,rax
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095259</ID>
+                  <Description>"BaseZenny"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>BaseZenny</Address>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095271</ID>
+                      <Description>"Zenny"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>BaseZenny</Address>
+                      <Offsets>
+                        <Offset>58</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095273</ID>
+                      <Description>"Points?"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>BaseZenny</Address>
+                      <Offsets>
+                        <Offset>60</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095272</ID>
+                      <Description>"Items?"</Description>
+                      <ShowAsHex>1</ShowAsHex>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>BaseZenny</Address>
+                      <Offsets>
+                        <Offset>80</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
@@ -3715,6 +4063,22 @@ MonsterHunterRise.exe+39D7EAF: 41 B0 65              - mov r8l,65
     <CodeEntry>
       <Description>Change of jmp 13FFE0000</Description>
       <AddressString>13FFE0000</AddressString>
+      <Before/>
+      <Actual>
+        <Byte>EB</Byte>
+        <Byte>FE</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>83</Byte>
+        <Byte>EC</Byte>
+        <Byte>48</Byte>
+        <Byte>48</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Change of jmp 13FFD0000</Description>
+      <AddressString>13FFD0000</AddressString>
       <Before/>
       <Actual>
         <Byte>EB</Byte>
