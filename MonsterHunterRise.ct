@@ -147,6 +147,7 @@ require("ce.view_mode")
 aobscanmodule(aob_storageaddress,MonsterHunterRise.exe,48 8B 15 ?? ?? ?? ?? 48 89 5C 24 ?? 48 89 7C 24 ?? 48 85 D2 74 0B)
 aobscanmodule(aob_unkbaseaddress,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 88 88 00 00 00 48 8B 71 10)
 aobscanmodule(aob_playeraddress,MonsterHunterRise.exe,74 6C 48 8B 15 ?? ?? ?? ?? 45 33 C0 48 8B CF)
+aobscanmodule(aob_playeraddress2,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 90 88 05 00 00 48 85 D2)
 
 label(StorageStatic)
 registersymbol(StorageStatic)
@@ -154,6 +155,8 @@ label(UnkBaseStatic)
 registersymbol(UnkBaseStatic)
 label(PlayerStatic)
 registersymbol(PlayerStatic)
+label(PlayerStatic2)
+registersymbol(PlayerStatic2)
 
 aob_storageaddress+7+(DWORD)[aob_storageaddress+3]:
 StorageStatic:
@@ -163,6 +166,9 @@ UnkBaseStatic:
 
 aob_playeraddress+7+2+(DWORD)[aob_playeraddress+3+2]:
 PlayerStatic:
+
+aob_playeraddress2+7+(DWORD)[aob_playeraddress2+3]:
+PlayerStatic2:
 
 
 [DISABLE]
@@ -451,20 +457,20 @@ disableMemrec(memrec)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337095435</ID>
-                  <Description>"Max Health"</Description>
+                  <ID>1337095461</ID>
+                  <Description>"Real Health"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
-                  <VariableType>4 Bytes</VariableType>
-                  <Address>PlayerStatic</Address>
+                  <VariableType>Float</VariableType>
+                  <Address>PlayerStatic2</Address>
                   <Offsets>
-                    <Offset>18</Offset>
-                    <Offset>120</Offset>
-                    <Offset>E0</Offset>
+                    <Offset>E4</Offset>
+                    <Offset>168</Offset>
+                    <Offset>3E0</Offset>
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
                   <ID>1337095445</ID>
-                  <Description>"Red Health"</Description>
+                  <Description>"Recoverable Health"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
                   <Address>PlayerStatic</Address>
@@ -475,13 +481,13 @@ disableMemrec(memrec)
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
-                  <ID>1337095446</ID>
-                  <Description>"Health??"</Description>
+                  <ID>1337095435</ID>
+                  <Description>"Max Health"</Description>
                   <ShowAsSigned>0</ShowAsSigned>
                   <VariableType>4 Bytes</VariableType>
                   <Address>PlayerStatic</Address>
                   <Offsets>
-                    <Offset>1C</Offset>
+                    <Offset>18</Offset>
                     <Offset>120</Offset>
                     <Offset>E0</Offset>
                   </Offsets>
@@ -531,6 +537,43 @@ disableMemrec(memrec)
               <Color>808080</Color>
               <GroupHeader>1</GroupHeader>
               <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095455</ID>
+                  <Description>"PlayerStatic"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>PlayerStatic</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095460</ID>
+                  <Description>"PlayerStatic2"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>PlayerStatic2</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095459</ID>
+                  <Description>"StorageStatic"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>StorageStatic</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095458</ID>
+                  <Description>"UnkBaseStatuc"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>UnkBaseStatic</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095456</ID>
+                  <Description>"========="</Description>
+                  <GroupHeader>1</GroupHeader>
+                </CheatEntry>
                 <CheatEntry>
                   <ID>1337095432</ID>
                   <Description>"Zenny Struct Base"</Description>
@@ -881,6 +924,13 @@ disableMemrec(memrec)
                       </CheatEntries>
                     </CheatEntry>
                   </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095457</ID>
+                  <Description>"real health base"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>"MonsterHunterRise.exe"+0E95DBB8</Address>
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
@@ -6409,6 +6459,95 @@ MonsterHunterRise.exe+32A7ED4: 44 8B 40 10           - mov r8d,[rax+10]
                       <Address>pLastItem</Address>
                       <Offsets>
                         <Offset>14</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095453</ID>
+                  <Description>"temporary get real health"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-11
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(tempgethealth,MonsterHunterRise.exe,F0 FC F3 0F 58 C0 F3 0F 11 83 E4 00 00 00) // should be unique
+alloc(newmem,$1000,tempgethealth)
+
+label(code)
+label(return)
+
+label(temphealth)
+registersymbol(temphealth)
+
+newmem:
+  mov [temphealth],rbx
+code:
+  movss [rbx+000000E4],xmm0
+  jmp return
+
+temphealth:
+  dq 0
+
+tempgethealth+06:
+  jmp newmem
+  nop 3
+return:
+registersymbol(tempgethealth)
+
+[DISABLE]
+
+tempgethealth+06:
+  db F3 0F 11 83 E4 00 00 00
+
+unregistersymbol(tempgethealth)
+dealloc(newmem)
+
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+3DFED1F
+
+MonsterHunterRise.exe+3DFECEC: E8 CF 64 D6 FF           - call MonsterHunterRise.exe+3B651C0
+MonsterHunterRise.exe+3DFECF1: 0F B7 4C 24 60           - movzx ecx,word ptr [rsp+60]
+MonsterHunterRise.exe+3DFECF6: E8 D5 F9 F0 FC           - call MonsterHunterRise.exe+D0E6D0
+MonsterHunterRise.exe+3DFECFB: F3 0F 11 83 DC 00 00 00  - movss [rbx+000000DC],xmm0
+MonsterHunterRise.exe+3DFED03: F3 0F 11 B3 E4 00 00 00  - movss [rbx+000000E4],xmm6
+MonsterHunterRise.exe+3DFED0B: EB 1A                    - jmp MonsterHunterRise.exe+3DFED27
+MonsterHunterRise.exe+3DFED0D: 0F B7 C8                 - movzx ecx,ax
+MonsterHunterRise.exe+3DFED10: 89 B3 DC 00 00 00        - mov [rbx+000000DC],esi
+MonsterHunterRise.exe+3DFED16: E8 B5 F9 F0 FC           - call MonsterHunterRise.exe+D0E6D0
+MonsterHunterRise.exe+3DFED1B: F3 0F 58 C0              - addss xmm0,xmm0
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+3DFED1F: F3 0F 11 83 E4 00 00 00  - movss [rbx+000000E4],xmm0
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+3DFED27: C1 EF 02                 - shr edi,02
+MonsterHunterRise.exe+3DFED2A: 85 FF                    - test edi,edi
+MonsterHunterRise.exe+3DFED2C: 0F 84 82 00 00 00        - je MonsterHunterRise.exe+3DFEDB4
+MonsterHunterRise.exe+3DFED32: 83 EF 01                 - sub edi,01
+MonsterHunterRise.exe+3DFED35: 74 44                    - je MonsterHunterRise.exe+3DFED7B
+MonsterHunterRise.exe+3DFED37: 83 FF 01                 - cmp edi,01
+MonsterHunterRise.exe+3DFED3A: 0F 85 90 00 00 00        - jne MonsterHunterRise.exe+3DFEDD0
+MonsterHunterRise.exe+3DFED40: 0F B7 4C 24 6A           - movzx ecx,word ptr [rsp+6A]
+MonsterHunterRise.exe+3DFED45: E8 86 F9 F0 FC           - call MonsterHunterRise.exe+D0E6D0
+MonsterHunterRise.exe+3DFED4A: 0F 28 C8                 - movaps xmm1,xmm0
+}
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095454</ID>
+                      <Description>"real health"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>temphealth</Address>
+                      <Offsets>
+                        <Offset>E4</Offset>
                       </Offsets>
                     </CheatEntry>
                   </CheatEntries>
