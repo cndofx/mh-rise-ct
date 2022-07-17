@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1337095152</ID>
-      <Description>"updated july 11 2022 - game v10.0.3.0"</Description>
+      <Description>"updated july 17 2022 - game v10.0.3.0"</Description>
       <GroupHeader>1</GroupHeader>
     </CheatEntry>
     <CheatEntry>
@@ -2234,6 +2234,85 @@ MonsterHunterRise.exe+13E410F: CC                       - int 3
 MonsterHunterRise.exe+13E4110: 40 53                    - push rbx
 }
 </AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095469</ID>
+              <Description>"Bypass Decoration Crafting Requirements (not fully tested)"</Description>
+              <Options moHideChildren="1"/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-17
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(sidughusirdg,MonsterHunterRise.exe,44 8B 60 14 49 8B 46 10) // should be unique
+alloc(newmem,$1000,sidughusirdg)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  //mov r12d,[rax+14]
+  mov r12d,0
+  mov rax,[r14+10]
+  jmp return
+
+sidughusirdg:
+  jmp newmem
+  nop 3
+return:
+registersymbol(sidughusirdg)
+
+[DISABLE]
+
+sidughusirdg:
+  db 44 8B 60 14 49 8B 46 10
+
+unregistersymbol(sidughusirdg)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+1385990
+
+MonsterHunterRise.exe+138596A: 42 8B 3C 38           - mov edi,[rax+r15]
+MonsterHunterRise.exe+138596E: 45 33 C0              - xor r8d,r8d
+MonsterHunterRise.exe+1385971: 49 8B 46 18           - mov rax,[r14+18]
+MonsterHunterRise.exe+1385975: 48 8B CD              - mov rcx,rbp
+MonsterHunterRise.exe+1385978: 48 8B 15 F9 FF 45 0D  - mov rdx,[MonsterHunterRise.exe+E7E5978]
+MonsterHunterRise.exe+138597F: 41 8B 1C 07           - mov ebx,[r15+rax]
+MonsterHunterRise.exe+1385983: E8 88 70 7B 02        - call MonsterHunterRise.exe+3B3CA10
+MonsterHunterRise.exe+1385988: 89 78 10              - mov [rax+10],edi
+MonsterHunterRise.exe+138598B: 33 FF                 - xor edi,edi
+MonsterHunterRise.exe+138598D: 89 58 14              - mov [rax+14],ebx
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+1385990: 44 8B 60 14           - mov r12d,[rax+14]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+1385994: 49 8B 46 10           - mov rax,[r14+10]
+MonsterHunterRise.exe+1385998: 3B 70 1C              - cmp esi,[rax+1C]
+MonsterHunterRise.exe+138599B: 7C 05                 - jl MonsterHunterRise.exe+13859A2
+MonsterHunterRise.exe+138599D: 4C 8B EF              - mov r13,rdi
+MonsterHunterRise.exe+13859A0: EB 29                 - jmp MonsterHunterRise.exe+13859CB
+MonsterHunterRise.exe+13859A2: 42 8B 3C 38           - mov edi,[rax+r15]
+MonsterHunterRise.exe+13859A6: 45 33 C0              - xor r8d,r8d
+MonsterHunterRise.exe+13859A9: 49 8B 46 18           - mov rax,[r14+18]
+MonsterHunterRise.exe+13859AD: 48 8B CD              - mov rcx,rbp
+MonsterHunterRise.exe+13859B0: 48 8B 15 C1 FF 45 0D  - mov rdx,[MonsterHunterRise.exe+E7E5978]
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>1337095471</ID>
+                  <Description>"still consumes items, but doesn't require you to have them"</Description>
+                  <GroupHeader>1</GroupHeader>
+                </CheatEntry>
+              </CheatEntries>
             </CheatEntry>
             <CheatEntry>
               <ID>50</ID>
@@ -6062,6 +6141,241 @@ MonsterHunterRise.exe+381599A: 74 04                 - je MonsterHunterRise.exe+
                     </CheatEntry>
                   </CheatEntries>
                 </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095465</ID>
+                  <Description>"No description"</Description>
+                  <ShowAsSigned>0</ShowAsSigned>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>26A9EAE4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095466</ID>
+                  <Description>"Zero Decoration Crafting Requirements (doesnt work)"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_getcraftingrequirement_decorations1,MonsterHunterRise.exe,42 8B 3C 39 48 8B CD 48 8B 15 ?? ?? ?? ?? 41 8B 1C 07) // should be unique
+alloc(newmem,$1000,inject_getcraftingrequirement_decorations1)
+
+
+label(inject_getcraftingrequirement_decorations)
+label(code)
+label(decorations_saved_address)
+label(decorations_saved_instructions)
+
+inject_getcraftingrequirement_decorations1+7+7+(DWORD)[inject_getcraftingrequirement_decorations1+7+3]:
+decorations_saved_address: // done to prevent script from breaking after game updates
+
+newmem:
+code:
+  // mov rdx,[MonsterHunterRise.exe+E7E5978]
+  // mov ebx,[r15+rax]
+  mov rdx,[decorations_saved_address]
+  mov ebx,0
+  jmp return
+align 8 CC
+decorations_saved_instructions:
+  readmem(inject_getcraftingrequirement_decorations1+7,11)
+
+inject_getcraftingrequirement_decorations1+7:
+inject_getcraftingrequirement_decorations:
+  jmp newmem
+  nop 6
+return:
+
+registersymbol(inject_getcraftingrequirement_decorations)
+registersymbol(decorations_saved_address)
+registersymbol(decorations_saved_instructions)
+
+registersymbol(newmem)
+
+[DISABLE]
+
+inject_getcraftingrequirement_decorations:
+  //mov rdx,[decorations_saved_address]
+  //mov ebx,[r15+rax]
+  readmem(decorations_saved_instructions,11)
+  //db 48 8B 15 3A 00 46 0D 41 8B 1C 07
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+138593E
+
+MonsterHunterRise.exe+138591D: 44 8D 7F 20           - lea r15d,[rdi+20]
+MonsterHunterRise.exe+1385921: 3B F8                 - cmp edi,eax
+MonsterHunterRise.exe+1385923: 7C 04                 - jl MonsterHunterRise.exe+1385929
+MonsterHunterRise.exe+1385925: 8B C7                 - mov eax,edi
+MonsterHunterRise.exe+1385927: EB 26                 - jmp MonsterHunterRise.exe+138594F
+MonsterHunterRise.exe+1385929: 49 8B 46 18           - mov rax,[r14+18]
+MonsterHunterRise.exe+138592D: 45 33 C0              - xor r8d,r8d
+MonsterHunterRise.exe+1385930: 42 8B 3C 39           - mov edi,[rcx+r15]
+MonsterHunterRise.exe+1385934: 48 8B CD              - mov rcx,rbp
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+1385937: 48 8B 15 3A 00 46 0D  - mov rdx,[MonsterHunterRise.exe+E7E5978]
+MonsterHunterRise.exe+138593E: 41 8B 1C 07           - mov ebx,[r15+rax]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+1385942: E8 C9 70 7B 02        - call MonsterHunterRise.exe+3B3CA10
+MonsterHunterRise.exe+1385947: 89 78 10              - mov [rax+10],edi
+MonsterHunterRise.exe+138594A: 33 FF                 - xor edi,edi
+MonsterHunterRise.exe+138594C: 89 58 14              - mov [rax+14],ebx
+MonsterHunterRise.exe+138594F: 81 78 10 00 00 00 04  - cmp [rax+10],04000000
+MonsterHunterRise.exe+1385956: 0F 84 CA 00 00 00     - je MonsterHunterRise.exe+1385A26
+MonsterHunterRise.exe+138595C: 49 8B 46 10           - mov rax,[r14+10]
+MonsterHunterRise.exe+1385960: 3B 70 1C              - cmp esi,[rax+1C]
+MonsterHunterRise.exe+1385963: 7C 05                 - jl MonsterHunterRise.exe+138596A
+MonsterHunterRise.exe+1385965: 48 8B C7              - mov rax,rdi
+}
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095467</ID>
+                  <Description>"No description"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>260B60B4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095468</ID>
+                  <Description>"Auto Assemble script"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-17
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(fdgjdrtj,MonsterHunterRise.exe,0F 87 97 00 00 00 49 8B) // should be unique
+alloc(newmem,$1000,fdgjdrtj)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  //ja MonsterHunterRise.exe+1385ABD
+  jmp return
+
+fdgjdrtj:
+  jmp newmem
+  nop
+return:
+registersymbol(fdgjdrtj)
+
+[DISABLE]
+
+fdgjdrtj:
+  db 0F 87 97 00 00 00
+
+unregistersymbol(fdgjdrtj)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+1385A20
+
+MonsterHunterRise.exe+1385A02: E8 C9 2F 74 00              - call MonsterHunterRise.exe+1AC89D0
+MonsterHunterRise.exe+1385A07: 48 85 C0                    - test rax,rax
+MonsterHunterRise.exe+1385A0A: 74 0D                       - je MonsterHunterRise.exe+1385A19
+MonsterHunterRise.exe+1385A0C: 48 8B D0                    - mov rdx,rax
+MonsterHunterRise.exe+1385A0F: 48 8B CD                    - mov rcx,rbp
+MonsterHunterRise.exe+1385A12: E8 E9 5B C3 FF              - call MonsterHunterRise.exe+FBB600
+MonsterHunterRise.exe+1385A17: EB 02                       - jmp MonsterHunterRise.exe+1385A1B
+MonsterHunterRise.exe+1385A19: 8B C7                       - mov eax,edi
+MonsterHunterRise.exe+1385A1B: 03 C3                       - add eax,ebx
+MonsterHunterRise.exe+1385A1D: 44 3B E0                    - cmp r12d,eax
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+1385A20: 0F 87 97 00 00 00           - ja MonsterHunterRise.exe+1385ABD
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+1385A26: 49 8B 4E 10                 - mov rcx,[r14+10]
+MonsterHunterRise.exe+1385A2A: FF C6                       - inc esi
+MonsterHunterRise.exe+1385A2C: 49 83 C7 04                 - add r15,04
+MonsterHunterRise.exe+1385A30: 8B 41 1C                    - mov eax,[rcx+1C]
+MonsterHunterRise.exe+1385A33: 3B F0                       - cmp esi,eax
+MonsterHunterRise.exe+1385A35: 0F 8C EE FE FF FF           - jl MonsterHunterRise.exe+1385929
+MonsterHunterRise.exe+1385A3B: 8B 5C 24 30                 - mov ebx,[rsp+30]
+MonsterHunterRise.exe+1385A3F: 44 0F B6 A4 24 A8 00 00 00  - movzx r12d,byte ptr [rsp+000000A8]
+MonsterHunterRise.exe+1385A48: 4C 8B AC 24 98 00 00 00     - mov r13,[rsp+00000098]
+MonsterHunterRise.exe+1385A50: 48 8B 7C 24 38              - mov rdi,[rsp+38]
+}
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095470</ID>
+                  <Description>"also kinda works"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-17
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(oi7asudhgfua,MonsterHunterRise.exe,41 8B 1C 07 E8 88 70 7B 02) // should be unique
+alloc(newmem,$1000,oi7asudhgfua)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  //mov [r15+rax],0
+  //mov ebx,[r15+rax] // this permamently removes the required items, not ideal
+  mov ebx,0
+  call MonsterHunterRise.exe+3B3CA10
+  jmp return
+
+oi7asudhgfua:
+  jmp newmem
+  nop 4
+return:
+registersymbol(oi7asudhgfua)
+
+[DISABLE]
+
+oi7asudhgfua:
+  db 41 8B 1C 07 E8 88 70 7B 02
+
+unregistersymbol(oi7asudhgfua)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+138597F
+
+MonsterHunterRise.exe+138595C: 49 8B 46 10           - mov rax,[r14+10]
+MonsterHunterRise.exe+1385960: 3B 70 1C              - cmp esi,[rax+1C]
+MonsterHunterRise.exe+1385963: 7C 05                 - jl MonsterHunterRise.exe+138596A
+MonsterHunterRise.exe+1385965: 48 8B C7              - mov rax,rdi
+MonsterHunterRise.exe+1385968: EB 26                 - jmp MonsterHunterRise.exe+1385990
+MonsterHunterRise.exe+138596A: 42 8B 3C 38           - mov edi,[rax+r15]
+MonsterHunterRise.exe+138596E: 45 33 C0              - xor r8d,r8d
+MonsterHunterRise.exe+1385971: 49 8B 46 18           - mov rax,[r14+18]
+MonsterHunterRise.exe+1385975: 48 8B CD              - mov rcx,rbp
+MonsterHunterRise.exe+1385978: 48 8B 15 F9 FF 45 0D  - mov rdx,[MonsterHunterRise.exe+E7E5978]
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+138597F: 41 8B 1C 07           - mov ebx,[r15+rax]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+1385983: E8 88 70 7B 02        - call MonsterHunterRise.exe+3B3CA10
+MonsterHunterRise.exe+1385988: 89 78 10              - mov [rax+10],edi
+MonsterHunterRise.exe+138598B: 33 FF                 - xor edi,edi
+MonsterHunterRise.exe+138598D: 89 58 14              - mov [rax+14],ebx
+MonsterHunterRise.exe+1385990: 44 8B 60 14           - mov r12d,[rax+14]
+MonsterHunterRise.exe+1385994: 49 8B 46 10           - mov rax,[r14+10]
+MonsterHunterRise.exe+1385998: 3B 70 1C              - cmp esi,[rax+1C]
+MonsterHunterRise.exe+138599B: 7C 05                 - jl MonsterHunterRise.exe+13859A2
+MonsterHunterRise.exe+138599D: 4C 8B EF              - mov r13,rdi
+MonsterHunterRise.exe+13859A0: EB 29                 - jmp MonsterHunterRise.exe+13859CB
+}
+</AssemblerScript>
+                </CheatEntry>
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
@@ -6262,6 +6576,25 @@ MonsterHunterRise.exe+280990F: 74 1E              - je MonsterHunterRise.exe+280
                               </Offsets>
                             </CheatEntry>
                             <CheatEntry>
+                              <ID>1337095299</ID>
+                              <Description>"Rarity?"</Description>
+                              <DropDownList DisplayValueAsItem="1">10100009:Rarity 2
+10100002:Rarity 3
+10100007:Rarity 4
+10100004:Rarity 5
+10100005:Rarity 6
+10100006:Rarity 7
+</DropDownList>
+                              <ShowAsHex>1</ShowAsHex>
+                              <ShowAsSigned>0</ShowAsSigned>
+                              <VariableType>4 Bytes</VariableType>
+                              <Address>EquipmentBox</Address>
+                              <Offsets>
+                                <Offset>30</Offset>
+                                <Offset>20</Offset>
+                              </Offsets>
+                            </CheatEntry>
+                            <CheatEntry>
                               <ID>1337095298</ID>
                               <Description>"Slot Pointer"</Description>
                               <ShowAsHex>1</ShowAsHex>
@@ -6274,7 +6607,7 @@ MonsterHunterRise.exe+280990F: 74 1E              - je MonsterHunterRise.exe+280
                               </Offsets>
                               <CheatEntries>
                                 <CheatEntry>
-                                  <ID>1337095299</ID>
+                                  <ID>1337095464</ID>
                                   <Description>"Level 1 Slots"</Description>
                                   <ShowAsHex>1</ShowAsHex>
                                   <ShowAsSigned>0</ShowAsSigned>
@@ -6327,6 +6660,19 @@ MonsterHunterRise.exe+280990F: 74 1E              - je MonsterHunterRise.exe+280
                               </Offsets>
                               <CheatEntries>
                                 <CheatEntry>
+                                  <ID>1337095462</ID>
+                                  <Description>"Skills ID 1"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>20</Offset>
+                                    <Offset>78</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                                <CheatEntry>
                                   <ID>1337095301</ID>
                                   <Description>"Skills Value 1"</Description>
                                   <ShowAsHex>1</ShowAsHex>
@@ -6341,6 +6687,19 @@ MonsterHunterRise.exe+280990F: 74 1E              - je MonsterHunterRise.exe+280
                                 </CheatEntry>
                                 <CheatEntry>
                                   <ID>1337095302</ID>
+                                  <Description>"Skills ID 2"</Description>
+                                  <ShowAsHex>1</ShowAsHex>
+                                  <ShowAsSigned>0</ShowAsSigned>
+                                  <VariableType>4 Bytes</VariableType>
+                                  <Address>EquipmentBox</Address>
+                                  <Offsets>
+                                    <Offset>24</Offset>
+                                    <Offset>78</Offset>
+                                    <Offset>20</Offset>
+                                  </Offsets>
+                                </CheatEntry>
+                                <CheatEntry>
+                                  <ID>1337095463</ID>
                                   <Description>"Skills Value 2"</Description>
                                   <ShowAsHex>1</ShowAsHex>
                                   <ShowAsSigned>0</ShowAsSigned>
@@ -6569,6 +6928,11 @@ MonsterHunterRise.exe+3DFED4A: 0F 28 C8                 - movaps xmm1,xmm0
     <DisassemblerComment>
       <Address>"MonsterHunterRise.exe"+12D100D</Address>
       <Comment>player max stamina
+</Comment>
+    </DisassemblerComment>
+    <DisassemblerComment>
+      <Address>"MonsterHunterRise.exe"+1385990</Address>
+      <Comment>writing required quantity here
 </Comment>
     </DisassemblerComment>
     <DisassemblerComment>
