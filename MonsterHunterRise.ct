@@ -2240,18 +2240,10 @@ MonsterHunterRise.exe+13E4110: 40 53                    - push rbx
               <Description>"Bypass Decoration Crafting Requirements (not fully tested)"</Description>
               <Options moHideChildren="1"/>
               <VariableType>Auto Assembler Script</VariableType>
-              <AssemblerScript>{ Game   : MonsterHunterRise.exe
-  Version: 
-  Date   : 2022-07-17
-  Author : trevo
+              <AssemblerScript>[ENABLE]
 
-  This script does blah blah blah
-}
-
-[ENABLE]
-
-aobscanmodule(sidughusirdg,MonsterHunterRise.exe,44 8B 60 14 49 8B 46 10) // should be unique
-alloc(newmem,$1000,sidughusirdg)
+aobscanmodule(inject_readdecorationrequirements,MonsterHunterRise.exe,44 8B 60 14 49 8B 46 10) // should be unique
+alloc(newmem,$1000,inject_readdecorationrequirements)
 
 label(code)
 label(return)
@@ -2264,18 +2256,18 @@ code:
   mov rax,[r14+10]
   jmp return
 
-sidughusirdg:
+inject_readdecorationrequirements:
   jmp newmem
   nop 3
 return:
-registersymbol(sidughusirdg)
+registersymbol(inject_readdecorationrequirements)
 
 [DISABLE]
 
 sidughusirdg:
   db 44 8B 60 14 49 8B 46 10
 
-unregistersymbol(sidughusirdg)
+unregistersymbol(inject_readdecorationrequirements)
 dealloc(newmem)
 
 {
