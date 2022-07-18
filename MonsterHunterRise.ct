@@ -2264,7 +2264,7 @@ registersymbol(inject_readdecorationrequirements)
 
 [DISABLE]
 
-sidughusirdg:
+inject_readdecorationrequirements:
   db 44 8B 60 14 49 8B 46 10
 
 unregistersymbol(inject_readdecorationrequirements)
