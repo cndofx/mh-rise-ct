@@ -199,7 +199,7 @@ local skill_names = {"",
     "Latent Power",
     "Maximum Might",
     "Critical Element",
-    "",
+    "Master's Touch",
     "Fire Attack",
     "Water Attack",
     "Ice Attack",
@@ -270,7 +270,7 @@ local skill_names = {"",
     "Geologist",
     "Partbreaker",
     "Capture Master",
-    "",
+    "Carving Master",
     "Good Luck",
     "Speed Sharpening",
     "Bombardier",
@@ -287,10 +287,10 @@ local skill_names = {"",
     "Leap of Faith",
     "Diversion",
     "Master Mounter",
-    "",
-    "",
-    "",
-    "",
+    "Chameleos Blessing",
+    "Kushala Blessing",
+    "Teostra Blessing",
+    "Dragonheart",
     "Wirebug Whisperer",
     "Wall Runner",
     "Counterstrike",
@@ -298,9 +298,32 @@ local skill_names = {"",
     "Hellfire Cloak",
     "Wind Alignment",
     "Thunder Alignment",
-    ""}
+    "Stormsoul",
+    "Blood Rite",
+    "Dereliction",
+    "Furious",
+    "Mail of Hellfire",
+    "Coalescence",
+    "Bloodlust",
+    "",
+	"",
+	"",
+    "",
+	"Redirection",
+    "Spiribird's Call",
+    "Charge Master",
+    "Foray",
+    "Tune-Up",
+    "Grinder (S)",
+    "Bladescale Hone",
+    "Wall Runner (Boost)",
+    "",
+    "Chain Crit",
+	"",
+	"Quick Breath"}
 
 function format_slots(slot1, slot2, slot3)
+  --printf("%i %i %i", slot1, slot2, slot3)
   local output = {}
   for i = 1, 3, 1 do
     if slot3 &gt; 0 then
@@ -761,6 +784,21 @@ disableMemrec(memrec)
                           </Offsets>
                         </CheatEntry>
                         <CheatEntry>
+                          <ID>1337095472</ID>
+                          <Description>"Rarity"</Description>
+                          <ShowAsHex>1</ShowAsHex>
+                          <ShowAsSigned>0</ShowAsSigned>
+                          <VariableType>4 Bytes</VariableType>
+                          <Address>StorageStatic</Address>
+                          <Offsets>
+                            <Offset>30</Offset>
+                            <Offset>20</Offset>
+                            <Offset>10</Offset>
+                            <Offset>98</Offset>
+                            <Offset>88</Offset>
+                          </Offsets>
+                        </CheatEntry>
+                        <CheatEntry>
                           <ID>1337095333</ID>
                           <Description>"Slots Pointer (charms)"</Description>
                           <ShowAsHex>1</ShowAsHex>
@@ -843,7 +881,6 @@ disableMemrec(memrec)
                             <CheatEntry>
                               <ID>1337095341</ID>
                               <Description>"Skill 1 ID"</Description>
-                              <ShowAsHex>1</ShowAsHex>
                               <ShowAsSigned>0</ShowAsSigned>
                               <VariableType>Byte</VariableType>
                               <Address>StorageStatic</Address>
@@ -859,7 +896,6 @@ disableMemrec(memrec)
                             <CheatEntry>
                               <ID>1337095343</ID>
                               <Description>"Skill 2 ID"</Description>
-                              <ShowAsHex>1</ShowAsHex>
                               <ShowAsSigned>0</ShowAsSigned>
                               <VariableType>Byte</VariableType>
                               <Address>StorageStatic</Address>
@@ -6902,6 +6938,330 @@ MonsterHunterRise.exe+3DFED4A: 0F 28 C8                 - movaps xmm1,xmm0
                       </Offsets>
                     </CheatEntry>
                   </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095483</ID>
+                  <Description>"Get Camera"</Description>
+                  <Options moHideChildren="1"/>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-20
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_readcamera,MonsterHunterRise.exe,17 8B 41 30 89 02 8B 41 34 89 42 04) // should be unique
+alloc(newmem,$1000,inject_readcamera)
+
+label(code)
+label(return)
+
+label(Camera)
+registersymbol(Camera)
+
+newmem:
+  cmp [rsp+1BC],1
+  jne code
+  cmp [rsp+12C],1
+  jne code
+  cmp [rbx+160],1
+  jne code
+  //cmp [rsp+1E4],1
+  //jne code
+  //cmp [rcx+15C],0
+  //je code
+  mov eax,[rcx+34]
+  mov [Camera],rcx
+code:
+  mov eax,[rcx+34]
+  mov [rdx+04],eax
+  jmp return
+
+align 8 CC
+Camera:
+  resq 1
+
+inject_readcamera+06:
+  jmp newmem
+  nop
+return:
+registersymbol(inject_readcamera)
+
+[DISABLE]
+
+inject_readcamera+06:
+  db 8B 41 34 89 42 04
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+3B31F97
+
+MonsterHunterRise.exe+3B31F72: 0F 28 CA                 - movaps xmm1,xmm2
+MonsterHunterRise.exe+3B31F75: 0F C6 C2 55              - shufps xmm0,xmm2,55
+MonsterHunterRise.exe+3B31F79: 0F C6 CA AA              - shufps xmm1,xmm2,-56
+MonsterHunterRise.exe+3B31F7D: 0F C6 D2 FF              - shufps xmm2,xmm2,-01
+MonsterHunterRise.exe+3B31F81: F3 0F 11 57 0C           - movss [rdi+0C],xmm2
+MonsterHunterRise.exe+3B31F86: F3 0F 11 47 04           - movss [rdi+04],xmm0
+MonsterHunterRise.exe+3B31F8B: F3 0F 11 4F 08           - movss [rdi+08],xmm1
+MonsterHunterRise.exe+3B31F90: EB 17                    - jmp MonsterHunterRise.exe+3B31FA9
+MonsterHunterRise.exe+3B31F92: 8B 41 30                 - mov eax,[rcx+30]
+MonsterHunterRise.exe+3B31F95: 89 02                    - mov [rdx],eax
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+3B31F97: 8B 41 34                 - mov eax,[rcx+34]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+3B31F9A: 89 42 04                 - mov [rdx+04],eax
+MonsterHunterRise.exe+3B31F9D: 8B 41 38                 - mov eax,[rcx+38]
+MonsterHunterRise.exe+3B31FA0: 89 42 08                 - mov [rdx+08],eax
+MonsterHunterRise.exe+3B31FA3: 8B 41 3C                 - mov eax,[rcx+3C]
+MonsterHunterRise.exe+3B31FA6: 89 42 0C                 - mov [rdx+0C],eax
+MonsterHunterRise.exe+3B31FA9: 48 8B C7                 - mov rax,rdi
+MonsterHunterRise.exe+3B31FAC: 48 8B 8C 24 E0 00 00 00  - mov rcx,[rsp+000000E0]
+MonsterHunterRise.exe+3B31FB4: 48 33 CC                 - xor rcx,rsp
+MonsterHunterRise.exe+3B31FB7: E8 54 F1 30 03           - call MonsterHunterRise.exe+6E41110
+MonsterHunterRise.exe+3B31FBC: 48 8B 9C 24 10 01 00 00  - mov rbx,[rsp+00000110]
+}
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095484</ID>
+                      <Description>"Camera X"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>30</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095485</ID>
+                      <Description>"Camera Y"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>34</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095486</ID>
+                      <Description>"Camera Z"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>38</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095493</ID>
+                      <Description>"Pitch"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>A4</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095495</ID>
+                      <Description>"Yaw?"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>A8</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095487</ID>
+                      <Description>"???"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>3C</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095489</ID>
+                      <Description>"???"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>40</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>1337095488</ID>
+                      <Description>"???"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>Camera</Address>
+                      <Offsets>
+                        <Offset>44</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095490</ID>
+                  <Description>"Detach Camera"</Description>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>{ Game   : MonsterHunterRise.exe
+  Version: 
+  Date   : 2022-07-20
+  Author : trevo
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(inject_writecamera,MonsterHunterRise.exe,8B 02 4C 8B C9 89 41) // should be unique
+alloc(newmem,$1000,inject_writecamera)
+
+label(code)
+label(return)
+
+newmem:
+  cmp [rcx+224],0
+  je code
+  ret
+code:
+  mov eax,[rdx]
+  mov r9,rcx
+  jmp return
+
+inject_writecamera:
+  jmp newmem
+return:
+registersymbol(inject_writecamera)
+
+[DISABLE]
+
+inject_writecamera:
+  db 8B 02 4C 8B C9
+
+unregistersymbol(inject_writecamera)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+3B33320
+
+MonsterHunterRise.exe+3B33316: CC                    - int 3 
+MonsterHunterRise.exe+3B33317: CC                    - int 3 
+MonsterHunterRise.exe+3B33318: CC                    - int 3 
+MonsterHunterRise.exe+3B33319: CC                    - int 3 
+MonsterHunterRise.exe+3B3331A: CC                    - int 3 
+MonsterHunterRise.exe+3B3331B: CC                    - int 3 
+MonsterHunterRise.exe+3B3331C: CC                    - int 3 
+MonsterHunterRise.exe+3B3331D: CC                    - int 3 
+MonsterHunterRise.exe+3B3331E: CC                    - int 3 
+MonsterHunterRise.exe+3B3331F: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+3B33320: 8B 02                 - mov eax,[rdx]
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+3B33322: 4C 8B C9              - mov r9,rcx
+MonsterHunterRise.exe+3B33325: 89 41 30              - mov [rcx+30],eax
+MonsterHunterRise.exe+3B33328: 8B 42 04              - mov eax,[rdx+04]
+MonsterHunterRise.exe+3B3332B: 89 41 34              - mov [rcx+34],eax
+MonsterHunterRise.exe+3B3332E: 8B 42 08              - mov eax,[rdx+08]
+MonsterHunterRise.exe+3B33331: 89 41 38              - mov [rcx+38],eax
+MonsterHunterRise.exe+3B33334: 80 B9 01 01 00 00 00  - cmp byte ptr [rcx+00000101],00
+MonsterHunterRise.exe+3B3333B: C6 81 00 01 00 00 01  - mov byte ptr [rcx+00000100],01
+MonsterHunterRise.exe+3B33342: 75 32                 - jne MonsterHunterRise.exe+3B33376
+MonsterHunterRise.exe+3B33344: 48 8B 49 60           - mov rcx,[rcx+60]
+}
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095491</ID>
+                  <Description>"Free Camera"</Description>
+                  <Options moHideChildren="1"/>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>// https://www.youtube.com/watch?v=4CQb0mETYMM
+[ENABLE]
+alloc(cameraSpeedModifier,4)
+registersymbol(cameraSpeedModifier)
+cameraSpeedModifier:
+  dd (float)1
+
+{$lua}
+if syntaxcheck then return end
+
+function checkKeys()
+  --print("checking keys")
+  local speed = readFloat("cameraSpeedModifier")
+
+  local pitch = readFloat("[Camera]+A4")
+  local yaw = readFloat("[Camera]+A8")
+
+  local camx = readFloat("[Camera]+30")
+  local camy = readFloat("[Camera]+34") -- up/down
+  local camz = readFloat("[Camera]+38")
+
+  local sinp = math.sin(pitch)
+  local cosp = math.cos(pitch)
+  local siny = math.sin(yaw)
+  local cosy = math.cos(yaw)
+
+  --[[
+  Numpad 8 - Forward
+  Numpad 4 - Left
+  Numpad 5 - Backward
+  Numpad 6 - Right
+  Numpad 7 - Down
+  Numpad 9 - Up
+  Numpad 0 - Speed Down
+  Numpad + - Speed Up
+  --]]
+
+  if isKeyPressed(VK_NUMPAD8) then
+     --printf("camera x = %f", camx)
+     --printf("cos(yaw) = %f", cosy)
+     --writeFloat("[Camera]+30", camx + (cosy * speed))
+     writeFloat("[Camera]+34", camy + (math.sin(pitch + math.rad(45)) * speed))
+  end
+end
+
+cameratimer = createTimer(nil)
+cameratimer.Interval = 10
+cameratimer.OnTimer = checkKeys
+cameratimer.Enabled = true
+
+
+[DISABLE]
+{$lua}
+if syntaxcheck then return end
+cameratimer.Enabled = false
+cameratimer.destroy()
+
+{$asm}
+dealloc(*)
+unregistersymbol(*)
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>1337095496</ID>
+                      <Description>"cameraSpeedModifier"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Float</VariableType>
+                      <Address>cameraSpeedModifier</Address>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>1337095492</ID>
+                  <Description>"No description"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>27C8E164</Address>
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
