@@ -6,6 +6,7 @@ Very early work in progress still, many things may be broken. Back up your save 
 
 - "Export Charms" to [mhrise.wiki-db.com](https://mhrise.wiki-db.com/sim/?hl=en)
 - "Add Items" script that will spawn items directly into your storage box
+- Bypass equipment and decoration crafting requirements
 
 ## Credits
 
