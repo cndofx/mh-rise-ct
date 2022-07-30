@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1337095152</ID>
-      <Description>"updated july 17 2022 - game v10.0.3.0"</Description>
+      <Description>"updated july 30 2022 - game v10.0.3.0"</Description>
       <GroupHeader>1</GroupHeader>
     </CheatEntry>
     <CheatEntry>
@@ -227,7 +227,7 @@ local skill_names = {"",
     "Offensive Guard",
     "Critical Draw",
     "Punishing Draw",
-    "Quick Sheath",
+    "Quick Sheathe",
     "Slugger",
     "Stamina Thief",
     "Affinity Sliding",
