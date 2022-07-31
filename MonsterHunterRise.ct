@@ -141,7 +141,7 @@ end
 require("ce.view_mode")
 
 -- charms stuff
-skill_names = {"",
+skill_names = {"(none)",
     "Attack Boost",
     "Agitator",
     "Peak Performance",
@@ -259,10 +259,10 @@ skill_names = {"",
     "Mail of Hellfire",
     "Coalescence",
     "Bloodlust",
-    "",
-	"",
-	"",
-    "",
+    "(invalid)",
+	"(invalid)",
+	"(invalid)",
+    "(invalid)",
 	"Redirection",
     "Spiribird's Call",
     "Charge Master",
@@ -271,9 +271,9 @@ skill_names = {"",
     "Grinder (S)",
     "Bladescale Hone",
     "Wall Runner (Boost)",
-    "",
+    "(invalid)",
     "Chain Crit",
-	"",
+	"(invalid)",
 	"Quick Breath"}
 
 box_equipment_size_addr = "[[[[StorageStatic]+88]+98]+10]+1C"
