@@ -4,9 +4,10 @@ Very early work in progress still, many things may be broken. Back up your save 
 
 ## Main Features
 
-- "Export Charms" to [mhrise.wiki-db.com](https://mhrise.wiki-db.com/sim/?hl=en)
+- "Export Charms" script for [mhrise.wiki-db.com](https://mhrise.wiki-db.com/sim/?hl=en)
+- "Charm Editor" script with a GUI
 - "Add Items" script that will spawn items directly into your storage box
-- Bypass equipment and decoration crafting requirements
+- "Zero Crafting Requirements" for equipment and "Bypass Decoration Crafting Requirements" scripts
 
 ## Credits
 
