@@ -394,7 +394,7 @@ function print_charm(address, friendly)
   local slot1 = readByte("[["..address_s.."]+70]+24")
   local slot2 = readByte("[["..address_s.."]+70]+28")
   local slot3 = readByte("[["..address_s.."]+70]+2C")
-  local slots = format_slots(slot1, slot2, slot3)
+  local slots = format_charm_slots(slot1, slot2, slot3)
 
   if friendly then
     print("charm:")
