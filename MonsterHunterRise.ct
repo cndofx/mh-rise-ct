@@ -137,57 +137,8 @@ end
 
 require("ce.view_mode")
 
-
-
-
-
-
-
-{$asm}
-aobscanmodule(aob_storageaddress,MonsterHunterRise.exe,48 8B 15 ?? ?? ?? ?? 48 89 5C 24 ?? 48 89 7C 24 ?? 48 85 D2 74 0B)
-aobscanmodule(aob_unkbaseaddress,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 88 88 00 00 00 48 8B 71 10)
-aobscanmodule(aob_playeraddress,MonsterHunterRise.exe,74 6C 48 8B 15 ?? ?? ?? ?? 45 33 C0 48 8B CF)
-aobscanmodule(aob_playeraddress2,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 90 88 05 00 00 48 85 D2)
-
-label(StorageStatic)
-registersymbol(StorageStatic)
-label(UnkBaseStatic)
-registersymbol(UnkBaseStatic)
-label(PlayerStatic)
-registersymbol(PlayerStatic)
-label(PlayerStatic2)
-registersymbol(PlayerStatic2)
-
-aob_storageaddress+7+(DWORD)[aob_storageaddress+3]:
-StorageStatic:
-
-aob_unkbaseaddress+7+(DWORD)[aob_unkbaseaddress+3]:
-UnkBaseStatic:
-
-aob_playeraddress+7+2+(DWORD)[aob_playeraddress+3+2]:
-PlayerStatic:
-
-aob_playeraddress2+7+(DWORD)[aob_playeraddress2+3]:
-PlayerStatic2:
-
-
-[DISABLE]
-
-{$asm}
-unregistersymbol(*)
-
-</AssemblerScript>
-      <CheatEntries>
-        <CheatEntry>
-          <ID>1337095344</ID>
-          <Description>"Export Charms (mhrise.wiki-db.com)"</Description>
-          <Color>FF8000</Color>
-          <VariableType>Auto Assembler Script</VariableType>
-          <AssemblerScript>{$lua}
-if syntaxcheck then return end
-
-[ENABLE]
-local skill_names = {"",
+-- charms stuff
+skill_names = {"",
     "Attack Boost",
     "Agitator",
     "Peak Performance",
@@ -322,8 +273,10 @@ local skill_names = {"",
 	"",
 	"Quick Breath"}
 
-function format_slots(slot1, slot2, slot3)
-  --printf("%i %i %i", slot1, slot2, slot3)
+box_equipment_size_addr = "[[[[StorageStatic]+88]+98]+10]+1C"
+box_equipment_location_addr = "[[[[StorageStatic]+88]+98]+10]+20"
+
+function format_charm_slots(slot1, slot2, slot3)
   local output = {}
   for i = 1, 3, 1 do
     if slot3 &gt; 0 then
@@ -342,6 +295,71 @@ function format_slots(slot1, slot2, slot3)
   return output
 end
 
+function get_charms()
+  local equipment_size = readInteger(box_equipment_size_addr)
+  local equipment_location = getAddressSafe(box_equipment_location_addr)
+
+  local charms = {}
+
+  for index = 0, equipment_size-1, 1 do
+    local offset = index * 8
+    local address = equipment_location + offset
+    local address_s = string.format("%X", address)
+    local item_type = readInteger("["..address_s.."]+2C")
+    if item_type == 3 then
+      charms[#charms+1] = address
+    end
+  end
+
+  return charms
+end
+
+
+
+{$asm}
+aobscanmodule(aob_storageaddress,MonsterHunterRise.exe,48 8B 15 ?? ?? ?? ?? 48 89 5C 24 ?? 48 89 7C 24 ?? 48 85 D2 74 0B)
+aobscanmodule(aob_unkbaseaddress,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 88 88 00 00 00 48 8B 71 10)
+aobscanmodule(aob_playeraddress,MonsterHunterRise.exe,74 6C 48 8B 15 ?? ?? ?? ?? 45 33 C0 48 8B CF)
+aobscanmodule(aob_playeraddress2,MonsterHunterRise.exe,48 8B 05 ?? ?? ?? ?? 48 8B 90 88 05 00 00 48 85 D2)
+
+label(StorageStatic)
+registersymbol(StorageStatic)
+label(UnkBaseStatic)
+registersymbol(UnkBaseStatic)
+label(PlayerStatic)
+registersymbol(PlayerStatic)
+label(PlayerStatic2)
+registersymbol(PlayerStatic2)
+
+aob_storageaddress+7+(DWORD)[aob_storageaddress+3]:
+StorageStatic:
+
+aob_unkbaseaddress+7+(DWORD)[aob_unkbaseaddress+3]:
+UnkBaseStatic:
+
+aob_playeraddress+7+2+(DWORD)[aob_playeraddress+3+2]:
+PlayerStatic:
+
+aob_playeraddress2+7+(DWORD)[aob_playeraddress2+3]:
+PlayerStatic2:
+
+
+[DISABLE]
+
+{$asm}
+unregistersymbol(*)
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1337095344</ID>
+          <Description>"Export Charms (mhrise.wiki-db.com)"</Description>
+          <Color>FF8000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+
+[ENABLE]
 function print_charm(address, friendly)
   friendly = friendly or false
   local address_s = string.format("%X", address)
@@ -370,20 +388,7 @@ function print_charm(address, friendly)
   end
 end
 
-local equipment_size = readInteger("[[[[StorageStatic]+88]+98]+10]+1C")
-local equipment_location = getAddressSafe("[[[[StorageStatic]+88]+98]+10]+20")
-
-local charms = {}
-
-for index = 0, equipment_size-1, 1 do
-  local offset = index * 8
-  local address = equipment_location + offset
-  local address_s = string.format("%X", address)
-  local item_type = readInteger("["..address_s.."]+2C")
-  if item_type == 3 then
-    charms[#charms+1] = address
-  end
-end
+charms = get_charms()
 
 GetLuaEngine().mOutput.Lines.Clear()
 
