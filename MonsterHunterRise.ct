@@ -6,7 +6,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1337095152</ID>
-      <Description>"updated july 30 2022 - game v10.0.3.0"</Description>
+      <Description>"updated august 15 2022 - game v11.0.1.0"</Description>
       <GroupHeader>1</GroupHeader>
     </CheatEntry>
     <CheatEntry>
@@ -610,22 +610,6 @@ printf("%i charms found", #charms)
 disableMemrec(memrec)
 
 [DISABLE]
-</AssemblerScript>
-        </CheatEntry>
-        <CheatEntry>
-          <ID>1337095498</ID>
-          <Description>"Charm Editor"</Description>
-          <Color>FF8000</Color>
-          <VariableType>Auto Assembler Script</VariableType>
-          <AssemblerScript>{$lua}
-if syntaxcheck then return end
-
-[ENABLE]
-CharmEditor1.show()
-disableMemrec(memrec)
- 
-[DISABLE]
-
 </AssemblerScript>
         </CheatEntry>
         <CheatEntry>
@@ -1591,79 +1575,6 @@ disableMemrec(memrec)
               <Options moHideChildren="1"/>
               <Color>C08000</Color>
               <GroupHeader>1</GroupHeader>
-              <CheatEntries>
-                <CheatEntry>
-                  <ID>1337095442</ID>
-                  <Description>"Disable Stamina Hunger Timer (not fully tested)"</Description>
-                  <VariableType>Auto Assembler Script</VariableType>
-                  <AssemblerScript>[ENABLE]
-
-aobscanmodule(inject_hungertimer,MonsterHunterRise.exe,F3 0F 11 13 76 12 0F) // should be unique
-alloc(newmem,$1000,inject_hungertimer)
-
-label(return)
-label(write)
-label(dontwrite)
-
-newmem:
-  pushfq
-  cmp [rsp+8C+8],1
-  je dontwrite
-  jmp write
-dontwrite:
-  popfq
-  jna return+12
-  jmp return
-write:
-  popfq
-  movss [rbx],xmm2
-  jna return+12
-  jmp return
-
-inject_hungertimer:
-  jmp newmem
-  nop
-return:
-registersymbol(inject_hungertimer)
-
-[DISABLE]
-
-inject_hungertimer:
-  db F3 0F 11 13 76 12
-
-unregistersymbol(inject_hungertimer)
-dealloc(newmem)
-
-{
-// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39DF09D
-
-MonsterHunterRise.exe+39DF077: 0F 57 C9        - xorps xmm1,xmm1
-MonsterHunterRise.exe+39DF07A: F3 0F 5A C0     - cvtss2sd xmm0,xmm0
-MonsterHunterRise.exe+39DF07E: 0F 5A D2        - cvtps2pd xmm2,xmm2
-MonsterHunterRise.exe+39DF081: F2 0F 59 C7     - mulsd xmm0,xmm7
-MonsterHunterRise.exe+39DF085: 0F 28 7C 24 20  - movaps xmm7,[rsp+20]
-MonsterHunterRise.exe+39DF08A: F2 0F 5A C0     - cvtsd2ss xmm0,xmm0
-MonsterHunterRise.exe+39DF08E: F3 0F 5A C8     - cvtss2sd xmm1,xmm0
-MonsterHunterRise.exe+39DF092: F2 0F 5C D1     - subsd xmm2,xmm1
-MonsterHunterRise.exe+39DF096: 66 0F 5A D2     - cvtpd2ps xmm2,xmm2
-MonsterHunterRise.exe+39DF09A: 0F 2F D6        - comiss xmm2,xmm6
-// ---------- INJECTING HERE ----------
-MonsterHunterRise.exe+39DF09D: F3 0F 11 13     - movss [rbx],xmm2
-// ---------- DONE INJECTING  ----------
-MonsterHunterRise.exe+39DF0A1: 76 12           - jna MonsterHunterRise.exe+39DF0B5
-MonsterHunterRise.exe+39DF0A3: 0F 28 74 24 30  - movaps xmm6,[rsp+30]
-MonsterHunterRise.exe+39DF0A8: 32 C0           - xor al,al
-MonsterHunterRise.exe+39DF0AA: 84 C0           - test al,al
-MonsterHunterRise.exe+39DF0AC: 0F 95 C0        - setne al
-MonsterHunterRise.exe+39DF0AF: 48 83 C4 40     - add rsp,40
-MonsterHunterRise.exe+39DF0B3: 5B              - pop rbx
-MonsterHunterRise.exe+39DF0B4: C3              - ret 
-MonsterHunterRise.exe+39DF0B5: 0F 28 74 24 30  - movaps xmm6,[rsp+30]
-MonsterHunterRise.exe+39DF0BA: B0 01           - mov al,01
-}
-</AssemblerScript>
-                </CheatEntry>
-              </CheatEntries>
             </CheatEntry>
             <CheatEntry>
               <ID>1337095146</ID>
@@ -2853,6 +2764,101 @@ disableMemrec(memrec)
                 </CheatEntry>
               </CheatEntries>
             </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1337095556</ID>
+          <Description>"outdated"</Description>
+          <Options moHideChildren="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>1337095498</ID>
+              <Description>"Charm Editor"</Description>
+              <Color>FF8000</Color>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{$lua}
+if syntaxcheck then return end
+
+[ENABLE]
+CharmEditor1.show()
+disableMemrec(memrec)
+ 
+[DISABLE]
+
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>1337095442</ID>
+              <Description>"Disable Stamina Hunger Timer (not fully tested)"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_hungertimer,MonsterHunterRise.exe,F3 0F 11 13 76 12 0F) // should be unique
+alloc(newmem,$1000,inject_hungertimer)
+
+label(return)
+label(write)
+label(dontwrite)
+
+newmem:
+  pushfq
+  cmp [rsp+8C+8],1
+  je dontwrite
+  jmp write
+dontwrite:
+  popfq
+  jna return+12
+  jmp return
+write:
+  popfq
+  movss [rbx],xmm2
+  jna return+12
+  jmp return
+
+inject_hungertimer:
+  jmp newmem
+  nop
+return:
+registersymbol(inject_hungertimer)
+
+[DISABLE]
+
+inject_hungertimer:
+  db F3 0F 11 13 76 12
+
+unregistersymbol(inject_hungertimer)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+39DF09D
+
+MonsterHunterRise.exe+39DF077: 0F 57 C9        - xorps xmm1,xmm1
+MonsterHunterRise.exe+39DF07A: F3 0F 5A C0     - cvtss2sd xmm0,xmm0
+MonsterHunterRise.exe+39DF07E: 0F 5A D2        - cvtps2pd xmm2,xmm2
+MonsterHunterRise.exe+39DF081: F2 0F 59 C7     - mulsd xmm0,xmm7
+MonsterHunterRise.exe+39DF085: 0F 28 7C 24 20  - movaps xmm7,[rsp+20]
+MonsterHunterRise.exe+39DF08A: F2 0F 5A C0     - cvtsd2ss xmm0,xmm0
+MonsterHunterRise.exe+39DF08E: F3 0F 5A C8     - cvtss2sd xmm1,xmm0
+MonsterHunterRise.exe+39DF092: F2 0F 5C D1     - subsd xmm2,xmm1
+MonsterHunterRise.exe+39DF096: 66 0F 5A D2     - cvtpd2ps xmm2,xmm2
+MonsterHunterRise.exe+39DF09A: 0F 2F D6        - comiss xmm2,xmm6
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+39DF09D: F3 0F 11 13     - movss [rbx],xmm2
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+39DF0A1: 76 12           - jna MonsterHunterRise.exe+39DF0B5
+MonsterHunterRise.exe+39DF0A3: 0F 28 74 24 30  - movaps xmm6,[rsp+30]
+MonsterHunterRise.exe+39DF0A8: 32 C0           - xor al,al
+MonsterHunterRise.exe+39DF0AA: 84 C0           - test al,al
+MonsterHunterRise.exe+39DF0AC: 0F 95 C0        - setne al
+MonsterHunterRise.exe+39DF0AF: 48 83 C4 40     - add rsp,40
+MonsterHunterRise.exe+39DF0B3: 5B              - pop rbx
+MonsterHunterRise.exe+39DF0B4: C3              - ret 
+MonsterHunterRise.exe+39DF0B5: 0F 28 74 24 30  - movaps xmm6,[rsp+30]
+MonsterHunterRise.exe+39DF0BA: B0 01           - mov al,01
+}
+</AssemblerScript>
+            </CheatEntry>
             <CheatEntry>
               <ID>1337095431</ID>
               <Description>"Zero Crafting Requirements (not fully tested)"</Description>
@@ -3126,116 +3132,6 @@ MonsterHunterRise.exe+31CA142: 73 7C           - jae MonsterHunterRise.exe+31CA1
                   <Address>pHoveredItem</Address>
                   <Offsets>
                     <Offset>40</Offset>
-                  </Offsets>
-                </CheatEntry>
-              </CheatEntries>
-            </CheatEntry>
-            <CheatEntry>
-              <ID>20</ID>
-              <Description>"Armor Spheres (dangerous)"</Description>
-              <Options moHideChildren="1"/>
-              <Color>000000</Color>
-              <VariableType>Auto Assembler Script</VariableType>
-              <AssemblerScript>[ENABLE]
-
-aobscanmodule(inject_armorspheres,MonsterHunterRise.exe,29 72 14 EB 03) // should be unique
-alloc(newmem,$1000,inject_armorspheres)
-
-label(code)
-label(return)
-
-label(pLastArmorSphere)
-registersymbol(pLastArmorSphere)
-label(bConsumeArmorSpheres)
-registersymbol(bConsumeArmorSpheres)
-
-newmem:
-  push rax
-  mov rax,pLastArmorSphere
-  mov [rax],rdx
-  pop rax
-  cmp [bConsumeArmorSpheres],0
-  jne code
-  mov esi,0
-code:
-  sub [rdx+14],esi
-  jmp MonsterHunterRise.exe+32A7E92
-  //jmp return
-
-pLastArmorSphere:
-  dq 0
-bConsumeArmorSpheres:
-  db 0
-
-inject_armorspheres:
-  jmp newmem
-return:
-registersymbol(inject_armorspheres)
-
-[DISABLE]
-
-inject_armorspheres:
-  db 29 72 14 EB 03
-
-unregistersymbol(inject_armorspheres)
-dealloc(newmem)
-
-//unregistersymbol(pLastArmorSphere)
-//unregistersymbol(bConsumeArmorSpheres)
-unregistersymbol(*)
-
-{
-// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+32A7E8A
-
-MonsterHunterRise.exe+32A7E69: 49 8B 42 28           - mov rax,[r10+28]
-MonsterHunterRise.exe+32A7E6D: FF D0                 - call rax
-MonsterHunterRise.exe+32A7E6F: 3D 00 00 00 04        - cmp eax,04000000
-MonsterHunterRise.exe+32A7E74: 74 75                 - je MonsterHunterRise.exe+32A7EEB
-MonsterHunterRise.exe+32A7E76: 48 89 7C 24 30        - mov [rsp+30],rdi
-MonsterHunterRise.exe+32A7E7B: 48 8B 53 20           - mov rdx,[rbx+20]
-MonsterHunterRise.exe+32A7E7F: 33 FF                 - xor edi,edi
-MonsterHunterRise.exe+32A7E81: 48 63 42 14           - movsxd  rax,dword ptr [rdx+14]
-MonsterHunterRise.exe+32A7E85: 48 3B C6              - cmp rax,rsi
-MonsterHunterRise.exe+32A7E88: 7C 05                 - jl MonsterHunterRise.exe+32A7E8F
-// ---------- INJECTING HERE ----------
-MonsterHunterRise.exe+32A7E8A: 29 72 14              - sub [rdx+14],esi
-// ---------- DONE INJECTING  ----------
-MonsterHunterRise.exe+32A7E8D: EB 03                 - jmp MonsterHunterRise.exe+32A7E92
-MonsterHunterRise.exe+32A7E8F: 89 7A 14              - mov [rdx+14],edi
-MonsterHunterRise.exe+32A7E92: 48 8B 05 0F 86 6B 0B  - mov rax,[MonsterHunterRise.exe+E9604A8]
-MonsterHunterRise.exe+32A7E99: 83 B8 D0 00 00 00 01  - cmp dword ptr [rax+000000D0],01
-MonsterHunterRise.exe+32A7EA0: 74 1B                 - je MonsterHunterRise.exe+32A7EBD
-MonsterHunterRise.exe+32A7EA2: 48 8B 43 20           - mov rax,[rbx+20]
-MonsterHunterRise.exe+32A7EA6: 48 8B CD              - mov rcx,rbp
-MonsterHunterRise.exe+32A7EA9: 48 8B 15 E8 F2 76 0B  - mov rdx,[MonsterHunterRise.exe+EA17198]
-MonsterHunterRise.exe+32A7EB0: 44 8B 48 14           - mov r9d,[rax+14]
-MonsterHunterRise.exe+32A7EB4: 44 8B 40 10           - mov r8d,[rax+10]
-}
-</AssemblerScript>
-              <CheatEntries>
-                <CheatEntry>
-                  <ID>21</ID>
-                  <Description>"Consume armor spheres on upgrade?"</Description>
-                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">1:True
-0:False
-</DropDownList>
-                  <ShowAsSigned>0</ShowAsSigned>
-                  <VariableType>Byte</VariableType>
-                  <Address>bConsumeArmorSpheres</Address>
-                </CheatEntry>
-                <CheatEntry>
-                  <ID>26</ID>
-                  <Description>"^ affects all items"</Description>
-                  <GroupHeader>1</GroupHeader>
-                </CheatEntry>
-                <CheatEntry>
-                  <ID>22</ID>
-                  <Description>"Last Quantity"</Description>
-                  <ShowAsSigned>0</ShowAsSigned>
-                  <VariableType>4 Bytes</VariableType>
-                  <Address>pLastArmorSphere</Address>
-                  <Offsets>
-                    <Offset>14</Offset>
                   </Offsets>
                 </CheatEntry>
               </CheatEntries>
@@ -7234,6 +7130,116 @@ disableMemrec(memrec)
                     </CheatEntry>
                   </CheatEntries>
                 </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"Armor Spheres (dangerous)"</Description>
+                  <Options moHideChildren="1"/>
+                  <Color>000000</Color>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+
+aobscanmodule(inject_armorspheres,MonsterHunterRise.exe,29 72 14 EB 03) // should be unique
+alloc(newmem,$1000,inject_armorspheres)
+
+label(code)
+label(return)
+
+label(pLastArmorSphere)
+registersymbol(pLastArmorSphere)
+label(bConsumeArmorSpheres)
+registersymbol(bConsumeArmorSpheres)
+
+newmem:
+  push rax
+  mov rax,pLastArmorSphere
+  mov [rax],rdx
+  pop rax
+  cmp [bConsumeArmorSpheres],0
+  jne code
+  mov esi,0
+code:
+  sub [rdx+14],esi
+  jmp MonsterHunterRise.exe+32A7E92
+  //jmp return
+
+pLastArmorSphere:
+  dq 0
+bConsumeArmorSpheres:
+  db 0
+
+inject_armorspheres:
+  jmp newmem
+return:
+registersymbol(inject_armorspheres)
+
+[DISABLE]
+
+inject_armorspheres:
+  db 29 72 14 EB 03
+
+unregistersymbol(inject_armorspheres)
+dealloc(newmem)
+
+//unregistersymbol(pLastArmorSphere)
+//unregistersymbol(bConsumeArmorSpheres)
+unregistersymbol(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: MonsterHunterRise.exe+32A7E8A
+
+MonsterHunterRise.exe+32A7E69: 49 8B 42 28           - mov rax,[r10+28]
+MonsterHunterRise.exe+32A7E6D: FF D0                 - call rax
+MonsterHunterRise.exe+32A7E6F: 3D 00 00 00 04        - cmp eax,04000000
+MonsterHunterRise.exe+32A7E74: 74 75                 - je MonsterHunterRise.exe+32A7EEB
+MonsterHunterRise.exe+32A7E76: 48 89 7C 24 30        - mov [rsp+30],rdi
+MonsterHunterRise.exe+32A7E7B: 48 8B 53 20           - mov rdx,[rbx+20]
+MonsterHunterRise.exe+32A7E7F: 33 FF                 - xor edi,edi
+MonsterHunterRise.exe+32A7E81: 48 63 42 14           - movsxd  rax,dword ptr [rdx+14]
+MonsterHunterRise.exe+32A7E85: 48 3B C6              - cmp rax,rsi
+MonsterHunterRise.exe+32A7E88: 7C 05                 - jl MonsterHunterRise.exe+32A7E8F
+// ---------- INJECTING HERE ----------
+MonsterHunterRise.exe+32A7E8A: 29 72 14              - sub [rdx+14],esi
+// ---------- DONE INJECTING  ----------
+MonsterHunterRise.exe+32A7E8D: EB 03                 - jmp MonsterHunterRise.exe+32A7E92
+MonsterHunterRise.exe+32A7E8F: 89 7A 14              - mov [rdx+14],edi
+MonsterHunterRise.exe+32A7E92: 48 8B 05 0F 86 6B 0B  - mov rax,[MonsterHunterRise.exe+E9604A8]
+MonsterHunterRise.exe+32A7E99: 83 B8 D0 00 00 00 01  - cmp dword ptr [rax+000000D0],01
+MonsterHunterRise.exe+32A7EA0: 74 1B                 - je MonsterHunterRise.exe+32A7EBD
+MonsterHunterRise.exe+32A7EA2: 48 8B 43 20           - mov rax,[rbx+20]
+MonsterHunterRise.exe+32A7EA6: 48 8B CD              - mov rcx,rbp
+MonsterHunterRise.exe+32A7EA9: 48 8B 15 E8 F2 76 0B  - mov rdx,[MonsterHunterRise.exe+EA17198]
+MonsterHunterRise.exe+32A7EB0: 44 8B 48 14           - mov r9d,[rax+14]
+MonsterHunterRise.exe+32A7EB4: 44 8B 40 10           - mov r8d,[rax+10]
+}
+</AssemblerScript>
+                  <CheatEntries>
+                    <CheatEntry>
+                      <ID>21</ID>
+                      <Description>"Consume armor spheres on upgrade?"</Description>
+                      <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">1:True
+0:False
+</DropDownList>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>Byte</VariableType>
+                      <Address>bConsumeArmorSpheres</Address>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>26</ID>
+                      <Description>"^ affects all items"</Description>
+                      <GroupHeader>1</GroupHeader>
+                    </CheatEntry>
+                    <CheatEntry>
+                      <ID>22</ID>
+                      <Description>"Last Quantity"</Description>
+                      <ShowAsSigned>0</ShowAsSigned>
+                      <VariableType>4 Bytes</VariableType>
+                      <Address>pLastArmorSphere</Address>
+                      <Offsets>
+                        <Offset>14</Offset>
+                      </Offsets>
+                    </CheatEntry>
+                  </CheatEntries>
+                </CheatEntry>
               </CheatEntries>
             </CheatEntry>
             <CheatEntry>
@@ -8175,57 +8181,6 @@ MonsterHunterRise.exe+32A7ED4: 44 8B 40 10           - mov r8d,[rax+10]
           </CheatEntries>
         </CheatEntry>
       </CheatEntries>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095527</ID>
-      <Description>"No description"</Description>
-      <VariableType>4 Bytes</VariableType>
-      <Address>273E9084</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095528</ID>
-      <Description>"itembase1"</Description>
-      <ShowAsSigned>0</ShowAsSigned>
-      <VariableType>4 Bytes</VariableType>
-      <Address>00000000273E4970</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095529</ID>
-      <Description>"itembase1"</Description>
-      <ShowAsSigned>0</ShowAsSigned>
-      <VariableType>4 Bytes</VariableType>
-      <Address>00000000273E4970</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095530</ID>
-      <Description>"charm 1 skill 1 level"</Description>
-      <VariableType>4 Bytes</VariableType>
-      <Address>259ADED0</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095531</ID>
-      <Description>"No description"</Description>
-      <VariableType>4 Bytes</VariableType>
-      <Address>17E6A80DC</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095532</ID>
-      <Description>"No description"</Description>
-      <VariableType>4 Bytes</VariableType>
-      <Address>19F58819C</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095551</ID>
-      <Description>"level 1 slots"</Description>
-      <VariableType>4 Bytes</VariableType>
-      <Address>25990384</Address>
-    </CheatEntry>
-    <CheatEntry>
-      <ID>1337095552</ID>
-      <Description>"asdasf"</Description>
-      <ShowAsSigned>0</ShowAsSigned>
-      <VariableType>4 Bytes</VariableType>
-      <Address>25990360</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
